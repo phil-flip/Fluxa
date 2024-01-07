@@ -1,0 +1,44 @@
+version: '3.8'
+name: 'fluxa'
+services:
+  api-server:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    configs:
+      - source: api-server-config
+        target: /etc/caddy/Caddyfile
+    volumes:
+      - ../api/public:/srv/app/public:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  api:
+    build:
+      context: services/api
+    volumes:
+      - ./../api:/srv/app
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  database:
+    image: postgres:15
+    env_file:
+      - ./services/database/.env
+    volumes:
+      - database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+configs:
+  api-server-config:
+    file: ./services/api-server/Caddyfile
+
+volumes:
+  database:
+  caddy_data:
+#    external: true
+  caddy_config:

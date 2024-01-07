@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "../node_modules/prosemirror-view/style/prosemirror.css";
+
+html {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    body {
+        flex-grow: 1;
+        display: flex;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+}
+
+:focus {
+    outline: none;
+}
+
+svg {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+}
