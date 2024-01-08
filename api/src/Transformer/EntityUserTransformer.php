@@ -15,7 +15,8 @@ readonly class EntityUserTransformer extends AbstractTransformer implements Tran
         $resource = new Output();
         $resource->id = $data->getId();
         $resource->name = $data->name;
-        $resource->photoUrl = $data->profilePhotoUrl;
+        $resource->emailAddress = $data->emailAddress;
+        $resource->photoUrl = $data->photoUrl;
 
         return $resource;
     }
