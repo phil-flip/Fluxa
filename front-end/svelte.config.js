@@ -1,5 +1,5 @@
 import adapter from '@sveltejs/adapter-auto';
-import {vitePreprocess} from '@sveltejs/kit/vite';
+import {vitePreprocess} from '@sveltejs/vite-plugin-svelte';
 import * as path from "path";
 import sequence from 'svelte-sequential-preprocessor'
 import {preprocessMeltUI} from "@melt-ui/pp";
