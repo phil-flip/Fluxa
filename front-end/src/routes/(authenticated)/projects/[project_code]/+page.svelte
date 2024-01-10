@@ -8,7 +8,6 @@
     import {page} from "$app/stores";
     import type {Component, Group, Label, Milestone, Project, Task} from "$src/api/schema/schema";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
-    import type {GROUPS} from "$src/stores/ContextStore";
 
     export let data;
 

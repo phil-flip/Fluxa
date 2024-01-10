@@ -1,7 +1,6 @@
 <script lang="ts">
     import Header from "$lib/layout/Header.svelte";
     import TaskLists from "$lib/tasks/TaskLists.svelte";
-    import type {GROUPS} from "$src/stores/ContextStore";
     import {context} from "$src/stores/ContextStore";
     import Main from "$lib/layout/Main.svelte";
     import type {DataStore} from "$src/stores/DataStore";

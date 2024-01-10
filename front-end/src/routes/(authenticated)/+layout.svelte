@@ -1,16 +1,16 @@
 <script lang="ts">
-    import "../app.scss";
+    import "$src/app.scss";
     import {formModal} from "$src/stores";
     import {toastStore} from "$src/stores/ToastStore";
     import {dataStore} from "$src/stores/DataStore";
     import TasksIcon from "$lib/svg/TasksIcon.svelte";
-    import CycleIcon from "../lib/svg/CycleIcon.svelte";
-    import ProjectIcon from "../lib/svg/ProjectIcon.svelte";
-    import {Modal, Spinner} from 'flowbite-svelte';
-    import CreateTaskModal from "../lib/tasks/CreateTaskModal.svelte";
+    import CycleIcon from "$lib/svg/CycleIcon.svelte";
+    import ProjectIcon from "$lib/svg/ProjectIcon.svelte";
+    import {Button, Modal, Spinner} from 'flowbite-svelte';
+    import CreateTaskModal from "$lib/tasks/CreateTaskModal.svelte";
     import {navigating} from "$app/stores";
-    import Toast from "../lib/Toast.svelte";
-    import ContextMenu from "../lib/ContextMenu.svelte";
+    import Toast from "$lib/Toast.svelte";
+    import ContextMenu from "$lib/ContextMenu.svelte";
     import {Pencil} from "lucide-svelte";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
 
@@ -18,8 +18,9 @@
 </script>
 
 <!-- Sidebar -->
-<div class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[40] w-64 bg-white border-r border-gray-200 pb-10 overflow-y-auto scrollbar-y lg:block lg:translate-x-0 lg:right-auto lg:bottom-0 dark:scrollbar-y dark:bg-gray-800 dark:border-gray-700"
-     id="application-sidebar">
+<div
+    class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[40] w-64 bg-white border-r border-gray-200 pb-10 overflow-y-auto scrollbar-y lg:block lg:translate-x-0 lg:right-auto lg:bottom-0 dark:scrollbar-y dark:bg-gray-800 dark:border-gray-700"
+    id="application-sidebar">
     <nav class="hs-accordion-group p-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
         <ul class="space-y-1.5 max-w-[100%]">
             <li class="pb-1.5">
@@ -81,18 +82,22 @@
                                           style="background-color: {team.properties.color}"></span>
                                     {team.name}
 
-                                    <svg class="hs-accordion-active:block ml-auto hidden w-3 h-3 text-gray-600 group-hover:text-gray-500 dark:text-gray-400"
-                                         width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2 11L8.16086 5.31305C8.35239 5.13625 8.64761 5.13625 8.83914 5.31305L15 11"
-                                              stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                                    <svg
+                                        class="hs-accordion-active:block ml-auto hidden w-3 h-3 text-gray-600 group-hover:text-gray-500 dark:text-gray-400"
+                                        width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M2 11L8.16086 5.31305C8.35239 5.13625 8.64761 5.13625 8.83914 5.31305L15 11"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                                     </svg>
 
-                                    <svg class="hs-accordion-active:hidden ml-auto block w-3 h-3 text-gray-600 group-hover:text-gray-500 dark:text-gray-400"
-                                         width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2 5L8.16086 10.6869C8.35239 10.8637 8.64761 10.8637 8.83914 10.6869L15 5"
-                                              stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                                    <svg
+                                        class="hs-accordion-active:hidden ml-auto block w-3 h-3 text-gray-600 group-hover:text-gray-500 dark:text-gray-400"
+                                        width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M2 5L8.16086 10.6869C8.35239 10.8637 8.64761 10.8637 8.83914 10.6869L15 5"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                                     </svg>
                                 </a>
 
@@ -117,26 +122,31 @@
                                             <div class="hs-accordion-group">
                                                 <div class="hs-accordion"
                                                      id="hs-basic-with-title-and-arrow-stretched-heading-{i}">
-                                                    <button class="hs-accordion-toggle hs-accordion-active:text-blue-600 group inline-flex items-center justify-between gap-x-3 w-full text-left text-gray-800 transition hover:text-gray-500 dark:hs-accordion-active:text-blue-500 dark:text-gray-200 dark:hover:text-gray-400"
-                                                            aria-controls="hs-basic-with-title-and-arrow-stretched-collapse-one">
+                                                    <button
+                                                        class="hs-accordion-toggle hs-accordion-active:text-blue-600 group inline-flex items-center justify-between gap-x-3 w-full text-left text-gray-800 transition hover:text-gray-500 dark:hs-accordion-active:text-blue-500 dark:text-gray-200 dark:hover:text-gray-400"
+                                                        aria-controls="hs-basic-with-title-and-arrow-stretched-collapse-one">
                                                         <a href="/"
                                                            class="flex items-center gap-x-3.5 py-2 pr-2.5 text-sm text-slate-700 rounded-md dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300">
                                                             <ProjectIcon/>
                                                             Projects
                                                         </a>
-                                                        <svg class="hs-accordion-active:hidden hs-accordion-active:text-blue-600 hs-accordion-active:group-hover:text-blue-600 block w-3 h-3 text-gray-600 group-hover:text-gray-500 dark:text-gray-400"
-                                                             width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M2 5L8.16086 10.6869C8.35239 10.8637 8.64761 10.8637 8.83914 10.6869L15 5"
-                                                                  stroke="currentColor" stroke-width="2"
-                                                                  stroke-linecap="round"/>
+                                                        <svg
+                                                            class="hs-accordion-active:hidden hs-accordion-active:text-blue-600 hs-accordion-active:group-hover:text-blue-600 block w-3 h-3 text-gray-600 group-hover:text-gray-500 dark:text-gray-400"
+                                                            width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M2 5L8.16086 10.6869C8.35239 10.8637 8.64761 10.8637 8.83914 10.6869L15 5"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round"/>
                                                         </svg>
-                                                        <svg class="hs-accordion-active:block hs-accordion-active:text-blue-600 hs-accordion-active:group-hover:text-blue-600 hidden w-3 h-3 text-gray-600 group-hover:text-gray-500 dark:text-gray-400"
-                                                             width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M2 11L8.16086 5.31305C8.35239 5.13625 8.64761 5.13625 8.83914 5.31305L15 11"
-                                                                  stroke="currentColor" stroke-width="2"
-                                                                  stroke-linecap="round"/>
+                                                        <svg
+                                                            class="hs-accordion-active:block hs-accordion-active:text-blue-600 hs-accordion-active:group-hover:text-blue-600 hidden w-3 h-3 text-gray-600 group-hover:text-gray-500 dark:text-gray-400"
+                                                            width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M2 11L8.16086 5.31305C8.35239 5.13625 8.64761 5.13625 8.83914 5.31305L15 11"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round"/>
                                                         </svg>
                                                     </button>
                                                     <div id="hs-basic-with-title-and-arrow-stretched-collapse-{i}"
@@ -175,7 +185,7 @@
 
 <ContextMenu></ContextMenu>
 
-<Modal bind:open={$formModal} autoclose={false} outsideclose>
+<Modal autoclose={false} bind:open={$formModal} outsideclose>
     <CreateTaskModal/>
 </Modal>
 

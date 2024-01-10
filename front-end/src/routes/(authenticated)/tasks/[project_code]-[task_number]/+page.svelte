@@ -122,53 +122,53 @@
 </script>
 
 <style lang="scss">
-  .properties {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    padding: 1rem;
-    align-items: center;
-    color: #666666;
+    .properties {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        align-items: center;
+        color: #666666;
 
-    > *:nth-child(2n+1) {
-      font-weight: bold;
+        > *:nth-child(2n+1) {
+            font-weight: bold;
+        }
+
+        :global(button) {
+            width: 100%;
+        }
+
+        hr {
+            grid-column: span 2;
+        }
     }
 
-    :global(button) {
-      width: 100%;
+    input[name="title"] {
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        cursor: text;
     }
 
-    hr {
-      grid-column: span 2;
+    .description {
+        position: relative;
+        margin-top: 1rem;
+        font-size: .9rem;
+
+        &:global(.placeholder:before) {
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: attr(data-placeholder);
+            color: #6B7280;
+            pointer-events: none;
+        }
+
+        :global(p) {
+            margin-bottom: 1rem;
+        }
     }
-  }
-
-  input[name="title"] {
-    width: 100%;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    cursor: text;
-  }
-
-  .description {
-    position: relative;
-    margin-top: 1rem;
-    font-size: .9rem;
-
-    &:global(.placeholder:before) {
-      position: absolute;
-      top: 0;
-      left: 0;
-      content: attr(data-placeholder);
-      color: #6B7280;
-      pointer-events: none;
-    }
-
-    :global(p) {
-      margin-bottom: 1rem;
-    }
-  }
 </style>
 
 <Header breadcrumb="{`${$page.params.project_code}-${$page.params.task_number}`}"/>
