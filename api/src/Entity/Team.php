@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 
 #[Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -24,8 +25,11 @@ class Team
     #[Column(type: 'json', options: ['default' => '{}'])]
     public array $properties = [];
 
-    #[ManyToOne(targetEntity: Workflow::class)]
+    #[OneToOne(targetEntity: Workflow::class)]
     public Workflow $workflow;
+
+    #[ManyToOne(targetEntity: Workspace::class)]
+    public Workspace $workspace;
 
     /** @var ArrayCollection<Cycle>|Cycle[] */
     #[OneToMany(mappedBy: 'team', targetEntity: Cycle::class)]

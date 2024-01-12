@@ -4,6 +4,10 @@ namespace App\ApiResource;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use App\State\GenericProvider;
 use App\State\ProjectProcessor;
 use App\State\ProjectProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,6 +19,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
     provider: ProjectProvider::class,
     processor: ProjectProcessor::class,
 )]
+#[Get()]
+#[GetCollection(provider: GenericProvider::class)]
+#[Post()]
 class Project
 {
     #[ApiProperty(identifier: false)]

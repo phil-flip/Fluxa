@@ -12,4 +12,20 @@ class CycleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Cycle::class);
     }
+
+    /**
+     * @param string[] $workspaceIds
+     * @param array $criteria
+     * @return Cycle[]
+     */
+    public function findForWorkspaces(array $workspaceIds, array $criteria = []): array
+    {
+        $queryBuilder = $this->createQueryBuilder('cycle')
+            ->innerJoin('cycle.team', 'team');
+
+        QueryBuilderHelper::addWorkspaceFilter('team', $workspaceIds, $queryBuilder);
+        QueryBuilderHelper::processCriteria('cycle', $criteria, $queryBuilder);
+
+        return $queryBuilder->getQuery()->execute();
+    }
 }

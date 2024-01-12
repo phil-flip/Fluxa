@@ -26,4 +26,21 @@ class GroupRepository extends ServiceEntityRepository
 
         return $queryBuilder->getQuery()->execute();
     }
+
+    /**
+     * @param string[] $workspaceIds
+     * @param array $criteria
+     * @return Group[]
+     */
+    public function findForWorkspaces(array $workspaceIds, array $criteria = []): array
+    {
+        $queryBuilder = $this->createQueryBuilder('g')
+            ->leftJoin('g.team', 'team')
+            ->leftJoin('g.project', 'project');
+
+        QueryBuilderHelper::addWorkspaceFilter(['team', 'project'], $workspaceIds, $queryBuilder);
+        QueryBuilderHelper::processCriteria('g', $criteria, $queryBuilder);
+
+        return $queryBuilder->getQuery()->execute();
+    }
 }

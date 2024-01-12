@@ -15,6 +15,22 @@ class TaskRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param string[] $workspaceIds
+     * @param array $criteria
+     * @return Task[]
+     */
+    public function findForWorkspaces(array $workspaceIds, array $criteria = []): array
+    {
+        $queryBuilder = $this->createQueryBuilder('task')
+            ->innerJoin('task.team', 'team');
+
+        QueryBuilderHelper::addWorkspaceFilter('team', $workspaceIds, $queryBuilder);
+        QueryBuilderHelper::processCriteria('task', $criteria, $queryBuilder);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
      * @throws Exception
      */
     public function insertTask(Task $task): void
@@ -43,7 +59,7 @@ class TaskRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->getConnection()->prepare(
-            "SELECT COALESCE(MAX(t.number), 0) + 1 
+            "SELECT COALESCE(MAX(t.number), 0) + 1
             FROM task t
             WHERE t.project_id = :project_id"
         );

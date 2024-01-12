@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 
 #[Entity(repositoryClass: ProjectRepository::class)]
@@ -21,6 +22,9 @@ class Project
 
     #[Column(type: 'string')]
     public string $code;
+
+    #[ManyToOne(targetEntity: Workspace::class)]
+    public Workspace $workspace;
 
     /** @var ArrayCollection<Label>|Label[] */
     #[OneToMany(mappedBy: 'project', targetEntity: Label::class)]

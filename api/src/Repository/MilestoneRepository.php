@@ -12,4 +12,20 @@ class MilestoneRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Milestone::class);
     }
+
+    /**
+     * @param string[] $workspaceIds
+     * @param array $criteria
+     * @return Milestone[]
+     */
+    public function findForWorkspaces(array $workspaceIds, array $criteria = []): array
+    {
+        $queryBuilder = $this->createQueryBuilder('milestone')
+            ->innerJoin('milestone.project', 'project');
+
+        QueryBuilderHelper::addWorkspaceFilter('project', $workspaceIds, $queryBuilder);
+        QueryBuilderHelper::processCriteria('milestone', $criteria, $queryBuilder);
+
+        return $queryBuilder->getQuery()->execute();
+    }
 }

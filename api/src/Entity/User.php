@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\Table;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -25,6 +27,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Column(type: 'string', nullable: true)]
     public ?string $photoUrl;
+
+    /** @var ArrayCollection<Workspace>|Workspace[] */
+    #[ManyToMany(targetEntity: Workspace::class)]
+    public iterable $workspaces;
+
+    public function __construct()
+    {
+        $this->workspaces = new ArrayCollection();
+    }
 
     public function getPassword(): ?string
     {
