@@ -139,7 +139,8 @@
         </div>
         <div class="space-y-5">
             <div class="flex items-center gap-x-2">
-                <TeamChoice bind:value="{formData.teamId}" choices="{teams}"/>
+                <TeamChoice bind:value="{formData.teamId}"
+                            choices="{teams}"/>
                 <ProjectChoice bind:value={formData.projectId}
                                baseComponent="{{teamId: formData.teamId}}"
                                choices="{[...projects.values()]}"

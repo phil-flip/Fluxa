@@ -38,6 +38,8 @@ function addEventListeners() {
             addGroup(detail.resource as Group);
         } else if (detail.resource_type === RESOURCES.PROJECT && detail.action === 'CREATE') {
             addProject(detail.resource as Project);
+        } else if (detail.resource_type === RESOURCES.TEAM && detail.action === 'CREATE') {
+            addTeam(detail.resource as Team);
         } else {
             throw new Error(`No handler found for data change event with detail: ${JSON.stringify(detail)}`);
         }
@@ -73,6 +75,14 @@ function addGroup(group: Group) {
 function addProject(project: Project) {
     dataStore.update(dataStore => {
         dataStore.projects = [...dataStore.projects, project];
+
+        return dataStore;
+    });
+}
+
+function addTeam(team: Team) {
+    dataStore.update(dataStore => {
+        dataStore.teams = [...dataStore.teams, team];
 
         return dataStore;
     });

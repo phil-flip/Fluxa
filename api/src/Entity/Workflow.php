@@ -13,7 +13,7 @@ class Workflow
 {
     use UuidTrait;
 
-    #[OneToMany(mappedBy: 'workflow', targetEntity: Status::class)]
+    #[OneToMany(mappedBy: 'workflow', targetEntity: Status::class, cascade: ['all'])]
     public Collection $statuses;
 
     public function __construct()

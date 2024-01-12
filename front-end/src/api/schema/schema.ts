@@ -97,6 +97,11 @@ export interface Team {
     workflow: Workflow;
 }
 
+export interface NewTeam {
+    organizationId: string;
+    name: string;
+}
+
 export interface Task {
     id: string,
     projectId: string,

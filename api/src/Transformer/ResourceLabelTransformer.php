@@ -6,6 +6,7 @@ use App\ApiResource\Label as Input;
 use App\Entity\Label as Output;
 use App\Entity\Project;
 use App\Entity\Team;
+use App\Helper\Color;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 
@@ -35,18 +36,10 @@ readonly class ResourceLabelTransformer extends AbstractTransformer implements T
             $data->teamId
         ) : null;
         $resource->properties = [
-            'color' => $this->createRandomColor(),
+            'color' => Color::createRandomColor(),
         ];
 
         return $resource;
-    }
-
-    private function createRandomColor(): string
-    {
-        $min = 0xCCCCCC;
-        $max = 0xFFFFFF;
-
-        return sprintf("#%06x", rand($min, $max));
     }
 
     public function supports($data): bool

@@ -25,7 +25,7 @@ class Team
     #[Column(type: 'json', options: ['default' => '{}'])]
     public array $properties = [];
 
-    #[OneToOne(targetEntity: Workflow::class)]
+    #[OneToOne(targetEntity: Workflow::class, cascade: ['all'])]
     public Workflow $workflow;
 
     #[ManyToOne(targetEntity: Workspace::class)]
@@ -46,4 +46,12 @@ class Team
     /** @var ArrayCollection<Label>|Label[] */
     #[OneToMany(mappedBy: 'team', targetEntity: Label::class)]
     public iterable $labels;
+
+    public function __construct()
+    {
+        $this->cycles = new ArrayCollection();
+        $this->projects = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+        $this->labels = new ArrayCollection();
+    }
 }

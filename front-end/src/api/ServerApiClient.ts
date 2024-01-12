@@ -12,7 +12,8 @@ import type {
     Task,
     Team,
 } from "$src/api/schema/schema";
-import {RESOURCES} from "./schema/schema";
+import type {NewTeam} from "$src/api/schema/schema";
+import {RESOURCES} from "$src/api/schema/schema";
 import {dispatchDataChangeEvent} from "$src/utilities/EventDispatcher";
 import {browser} from '$app/environment';
 import {goto} from "$app/navigation";
@@ -156,6 +157,28 @@ export class ServerApiClient {
         });
 
         return createdProject;
+    }
+
+    async postTeam(team: NewTeam): Promise<Team> {
+        const response = await fetch(`https://api.localhost/teams`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                ...getAuthorizationHeader(),
+            },
+            body: JSON.stringify(team),
+        });
+
+        const createdTeam = await response.json();
+
+        dispatchDataChangeEvent({
+            action: 'CREATE',
+            resource_type: RESOURCES.TEAM,
+            resource: createdTeam,
+        });
+
+        return createdTeam;
     }
 
     async postGroup(group: NewGroup): Promise<Group> {

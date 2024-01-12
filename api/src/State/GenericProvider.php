@@ -23,7 +23,7 @@ readonly class GenericProvider implements ProviderInterface
     public function __construct(
         private EntityManagerInterface $entityManager,
         private TransformerChain $transformer,
-        private TokenStorageInterface $tokenStorage
+        private TokenStorageInterface $tokenStorage,
     ) {
     }
 

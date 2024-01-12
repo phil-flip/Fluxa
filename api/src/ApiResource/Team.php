@@ -4,22 +4,26 @@ namespace App\ApiResource;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\State\GenericProvider;
+use App\State\TeamProcessor;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
     provider: GenericProvider::class,
+    processor: TeamProcessor::class,
 )]
 class Team
 {
     #[Groups(['read'])]
     public string $id;
 
-    #[Groups(['read'])]
+    #[NotBlank()]
+    #[Groups(['read', 'write'])]
     public string $name;
 
     #[Groups(['read'])]
@@ -42,6 +46,9 @@ class Team
 
     #[Groups(['read'])]
     public Workflow $workflow;
+
+    #[Groups(['write'])]
+    public string $workspaceId;
 
     /** @var string[] */
     #[Groups(['read'])]
