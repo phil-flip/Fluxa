@@ -48,6 +48,7 @@
 	"type": "module",
 	"dependencies": {
 		"@floating-ui/dom": "^1.5.3",
+		"dotenv": "^16.3.1",
 		"flowbite": "^1.8.1",
 		"flowbite-svelte": "^0.44.15",
 		"i": "^0.3.7",

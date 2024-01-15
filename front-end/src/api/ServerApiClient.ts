@@ -8,15 +8,16 @@ import type {
     NewLabel,
     NewMilestone,
     NewProject,
+    NewTeam,
     Project,
     Task,
     Team,
 } from "$src/api/schema/schema";
-import type {NewTeam} from "$src/api/schema/schema";
 import {RESOURCES} from "$src/api/schema/schema";
 import {dispatchDataChangeEvent} from "$src/utilities/EventDispatcher";
 import {browser} from '$app/environment';
 import {goto} from "$app/navigation";
+import {PUBLIC_API_URL} from '$env/static/public';
 
 function getAuthorizationHeader(): { 'Authorization': string } {
     if (!browser) {
@@ -38,8 +39,11 @@ function getAuthorizationHeader(): { 'Authorization': string } {
  * but we DO have to revert these changes when the server-side call fails
  */
 export class ServerApiClient {
+    constructor(private readonly baseUrl: string) {
+    }
+
     async authenticate(emailAddress: string, password: string): Promise<Response> {
-        return await fetch(`https://api.localhost/auth`, {
+        return await fetch(`${this.baseUrl}/auth`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +57,7 @@ export class ServerApiClient {
     }
 
     async putTask(id: string, taskData: Partial<Task>): Promise<void> {
-        await fetch(`https://api.localhost/tasks/${id}`, {
+        await fetch(`${this.baseUrl}/tasks/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/merge-patch+json',
@@ -72,7 +76,7 @@ export class ServerApiClient {
     }
 
     async postComponent(component: Component): Promise<Component> {
-        const response = await fetch(`https://api.localhost/components`, {
+        const response = await fetch(`${this.baseUrl}/components`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -94,7 +98,7 @@ export class ServerApiClient {
     }
 
     async postLabel(label: NewLabel): Promise<Label> {
-        const response = await fetch(`https://api.localhost/labels`, {
+        const response = await fetch(`${this.baseUrl}/labels`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -116,7 +120,7 @@ export class ServerApiClient {
     }
 
     async postMilestone(milestone: NewMilestone): Promise<Milestone> {
-        const response = await fetch(`https://api.localhost/milestones`, {
+        const response = await fetch(`${this.baseUrl}/milestones`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -138,7 +142,7 @@ export class ServerApiClient {
     }
 
     async postProject(project: NewProject): Promise<Project> {
-        const response = await fetch(`https://api.localhost/projects`, {
+        const response = await fetch(`${this.baseUrl}/projects`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -160,7 +164,7 @@ export class ServerApiClient {
     }
 
     async postTeam(team: NewTeam): Promise<Team> {
-        const response = await fetch(`https://api.localhost/teams`, {
+        const response = await fetch(`${this.baseUrl}/teams`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -182,7 +186,7 @@ export class ServerApiClient {
     }
 
     async postGroup(group: NewGroup): Promise<Group> {
-        const response = await fetch(`https://api.localhost/groups`, {
+        const response = await fetch(`${this.baseUrl}/groups`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -212,7 +216,7 @@ export class ServerApiClient {
         if (teamId) {
             searchParameters.append('team_id', teamId);
         }
-        const rows = await fetch(`https://api.localhost/tasks?${searchParameters}`, {
+        const rows = await fetch(`${this.baseUrl}/tasks?${searchParameters}`, {
             headers: {
                 'accept': 'application/json',
                 ...getAuthorizationHeader(),
@@ -223,7 +227,7 @@ export class ServerApiClient {
     }
 
     async getLabels(): Promise<Label[]> {
-        const response = await fetch(`https://api.localhost/labels`, {
+        const response = await fetch(`${this.baseUrl}/labels`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -235,7 +239,7 @@ export class ServerApiClient {
     }
 
     async getMilestones(): Promise<Milestone[]> {
-        const response = await fetch(`https://api.localhost/milestones`, {
+        const response = await fetch(`${this.baseUrl}/milestones`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -247,7 +251,7 @@ export class ServerApiClient {
     }
 
     async getComponents(): Promise<Component[]> {
-        const response = await fetch(`https://api.localhost/components`, {
+        const response = await fetch(`${this.baseUrl}/components`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -259,7 +263,7 @@ export class ServerApiClient {
     }
 
     async getGroups(): Promise<Group[]> {
-        const response = await fetch(`https://api.localhost/groups`, {
+        const response = await fetch(`${this.baseUrl}/groups`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -271,7 +275,7 @@ export class ServerApiClient {
     }
 
     async getProjects(): Promise<Project[]> {
-        const response = await fetch(`https://api.localhost/projects`, {
+        const response = await fetch(`${this.baseUrl}/projects`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -283,7 +287,7 @@ export class ServerApiClient {
     }
 
     async getCycles(): Promise<Cycle[]> {
-        const response = await fetch(`https://api.localhost/cycles`, {
+        const response = await fetch(`${this.baseUrl}/cycles`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -295,7 +299,7 @@ export class ServerApiClient {
     }
 
     async postTask(task): Promise<Task> {
-        const response = await fetch('https://api.localhost/tasks', {
+        const response = await fetch(`${this.baseUrl}/tasks`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -316,7 +320,7 @@ export class ServerApiClient {
     }
 
     async getTeams(): Promise<Team[]> {
-        const rows = await fetch('https://api.localhost/teams', {
+        const rows = await fetch(`${this.baseUrl}/teams`, {
             headers: {
                 'accept': 'application/json',
                 ...getAuthorizationHeader(),
@@ -327,7 +331,7 @@ export class ServerApiClient {
     }
 
     async getProject(code: string): Promise<Project> {
-        const project = await fetch(`https://api.localhost/projects/${code}`, {
+        const project = await fetch(`${this.baseUrl}/projects/${code}`, {
             headers: {
                 'accept': 'application/json',
                 ...getAuthorizationHeader(),
@@ -338,5 +342,5 @@ export class ServerApiClient {
     }
 }
 
-console.debug('export const api = new ServerApiClient();');
-export const api = new ServerApiClient();
+console.debug('export const api = new ServerApiClient(PUBLIC_API_URL);');
+export const api = new ServerApiClient(PUBLIC_API_URL);
