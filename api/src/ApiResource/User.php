@@ -37,4 +37,8 @@ class User
     #[Groups(['write'])]
     #[ApiProperty(description: 'A plain text password')]
     public string $password;
+
+    #[NotBlank(groups: ['post'])]
+    #[Groups(['write'])]
+    public string $workspaceId;
 }

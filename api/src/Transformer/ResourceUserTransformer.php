@@ -4,6 +4,9 @@ namespace App\Transformer;
 
 use App\ApiResource\User as Input;
 use App\Entity\User as Output;
+use App\Entity\Workspace;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
@@ -12,7 +15,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 readonly class ResourceUserTransformer extends AbstractTransformer implements Transformer
 {
     public function __construct(
-        private UserPasswordHasherInterface $passwordHasher
+        private UserPasswordHasherInterface $passwordHasher,
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -26,6 +30,8 @@ readonly class ResourceUserTransformer extends AbstractTransformer implements Tr
         if ($data->password) {
             $resource->password = $this->passwordHasher->hashPassword($resource, $data->password);
         }
+
+        $resource->workspaces->add($this->entityManager->getReference(Workspace::class, $data->workspaceId));
 
         return $resource;
     }

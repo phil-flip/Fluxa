@@ -40,6 +40,9 @@ class Project
     #[Groups(['read'])]
     public string $code;
 
+    #[Groups(['write'])]
+    public string $workspaceId;
+
     /** @var string[] */
     #[Groups(['read'])]
     public iterable $labelIds = [];

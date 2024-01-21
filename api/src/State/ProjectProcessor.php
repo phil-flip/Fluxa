@@ -6,17 +6,20 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\Project as ProjectResource;
 use App\Entity\Project as ProjectEntity;
+use App\Entity\User;
 use App\Repository\TeamRepository;
 use App\Transformer\TransformerChain;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 readonly class ProjectProcessor implements ProcessorInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
         private TeamRepository $teamRepository,
-        private TransformerChain $transformer
+        private TransformerChain $transformer,
+        private TokenStorageInterface $tokenStorage,
     ) {
     }
 
@@ -36,6 +39,11 @@ readonly class ProjectProcessor implements ProcessorInterface
         /** @var ProjectEntity $project */
         $project = $this->transformer->transform($data);
         $project->code = $this->generateProjectCode($project->name);
+
+        // Remove this when we support custom workspaces
+        /** @var User $user */
+        $user = $this->tokenStorage->getToken()?->getUser();
+        $project->workspace = $user->workspaces->first();
 
         $this->entityManager->persist($project);
 
