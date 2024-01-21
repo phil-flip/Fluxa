@@ -81,6 +81,11 @@ readonly class ProjectProcessor implements ProcessorInterface
             $code .= substr($words[0], 1, $additionalCharsNeeded);
         }
 
+        // Pad the code with random uppercase letters if it's shorter than 3 characters
+        while (strlen($code) < 3) {
+            $code .= chr(rand(65, 90)); // ASCII values for A-Z
+        }
+
         // Truncate the code to 3 characters if it's longer, or return as is if shorter
         return substr($code, 0, 3);
     }
