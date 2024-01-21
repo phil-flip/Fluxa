@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 
@@ -26,6 +27,10 @@ class Project
     #[ManyToOne(targetEntity: Workspace::class)]
     public Workspace $workspace;
 
+    /** @var ArrayCollection<Team>|Team[] */
+    #[ManyToMany(targetEntity: Team::class, mappedBy: 'projects')]
+    public iterable $teams;
+
     /** @var ArrayCollection<Label>|Label[] */
     #[OneToMany(mappedBy: 'project', targetEntity: Label::class)]
     public iterable $labels;
@@ -44,6 +49,7 @@ class Project
 
     public function __construct()
     {
+        $this->teams = new ArrayCollection();
         $this->labels = new ArrayCollection();
         $this->milestones = new ArrayCollection();
         $this->components = new ArrayCollection();

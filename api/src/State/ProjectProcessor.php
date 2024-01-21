@@ -52,6 +52,7 @@ readonly class ProjectProcessor implements ProcessorInterface
             throw new RuntimeException(sprintf('No team found for team ID "%s"', $data->teamId));
         }
         $team->projects->add($project);
+        $project->teams->add($team);
 
         $this->entityManager->flush();
 

@@ -36,7 +36,7 @@ class Team
     public iterable $cycles;
 
     /** @var ArrayCollection<Project>|Project[] */
-    #[ManyToMany(targetEntity: Project::class)]
+    #[ManyToMany(targetEntity: Project::class, inversedBy: 'teams')]
     public iterable $projects;
 
     /** @var ArrayCollection<Group>|Group[] */

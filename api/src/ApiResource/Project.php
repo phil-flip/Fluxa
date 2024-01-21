@@ -45,6 +45,10 @@ class Project
 
     /** @var string[] */
     #[Groups(['read'])]
+    public iterable $teamIds = [];
+
+    /** @var string[] */
+    #[Groups(['read'])]
     public iterable $labelIds = [];
 
     /** @var string[] */
