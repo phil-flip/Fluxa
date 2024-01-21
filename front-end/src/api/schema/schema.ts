@@ -74,6 +74,7 @@ export interface NewProject extends BaseProject {
 export interface BaseProject {
     name: string;
     code: string;
+    teamIds: string[];
     memberIds: string[];
     labelIds: string[];
     groupIds: string[];

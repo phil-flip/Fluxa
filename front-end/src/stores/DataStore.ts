@@ -74,6 +74,10 @@ function addGroup(group: Group) {
 
 function addProject(project: Project) {
     dataStore.update(dataStore => {
+        project.teamIds.forEach((teamId: string) => {
+            const teamIndex = dataStore.teams!.findIndex(team => team.id === teamId);
+            dataStore.teams![teamIndex].projectIds = [...dataStore.teams![teamIndex].projectIds, project.id];
+        });
         dataStore.projects = [...dataStore.projects, project];
 
         return dataStore;

@@ -14,9 +14,11 @@ export class DataStoreApiClient {
     }
 
     public getProjectsByTeamId(teamId: string): Project[] {
-        const projectIds = new Set(this.dataStore.teams
-            .filter(team => team.id === teamId)
-            .flatMap(team => team.projectIds));
+        const projectIds = new Set(
+            this.dataStore.teams
+                .filter(team => team.id === teamId)
+                .flatMap(team => team.projectIds)
+        );
 
         return Array.from(projectIds).map(projectId => this.getProject(projectId));
     }
