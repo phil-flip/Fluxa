@@ -2,8 +2,11 @@
     import {api} from "$src/api/ServerApiClient";
     import {goto} from '$app/navigation';
 
+    let isSubmitted = false;
     const login = async () => {
+        isSubmitted = true;
         const response = await api.authenticate(username, password);
+        isSubmitted = false;
 
         if (response.status === 200) {
             const responseJson = await response.json();
@@ -49,8 +52,10 @@
             {/if}
 
             <div class="mt-5 flex justify-end gap-x-2">
-                <button class="w-full justify-center py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        type="submit">
+                <button
+                    disabled="{isSubmitted}"
+                    class="w-full justify-center py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                    type="submit">
                     Log in
                 </button>
             </div>
