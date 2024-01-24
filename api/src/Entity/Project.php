@@ -10,8 +10,10 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[Entity(repositoryClass: ProjectRepository::class)]
+#[UniqueConstraint(columns: ['code', 'workspace_id'])]
 #[HasLifecycleCallbacks]
 class Project
 {

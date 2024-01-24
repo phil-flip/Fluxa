@@ -5,8 +5,11 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\Project as ProjectResource;
+use App\Entity\Project;
 use App\Entity\Project as ProjectEntity;
 use App\Entity\User;
+use App\Helper\UserHelper;
+use App\Repository\ProjectRepository;
 use App\Repository\TeamRepository;
 use App\Transformer\TransformerChain;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +20,7 @@ readonly class ProjectProcessor implements ProcessorInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private ProjectRepository $projectRepository,
         private TeamRepository $teamRepository,
         private TransformerChain $transformer,
         private TokenStorageInterface $tokenStorage,
@@ -87,6 +91,29 @@ readonly class ProjectProcessor implements ProcessorInterface
         }
 
         // Truncate the code to 3 characters if it's longer, or return as is if shorter
-        return substr($code, 0, 3);
+        $code = substr($code, 0, 3);
+
+        $originalCode = $code;
+        $reservedProjectCodes = $this->getReservedProjectCodes();
+        $additionalCharacterCode = 65;
+        while (in_array($code, $reservedProjectCodes)) {
+            $code = $originalCode . chr($additionalCharacterCode);
+            $additionalCharacterCode++;
+
+            // Keep adding characters if needed
+            if ($additionalCharacterCode === 90) {
+                $originalCode = $code;
+                $additionalCharacterCode = 65;
+            }
+        }
+
+        return $code;
+    }
+
+    private function getReservedProjectCodes(): array
+    {
+        $projects = $this->projectRepository->findForWorkspaces(UserHelper::getWorkspaceIds($this->tokenStorage));
+
+        return array_map(fn(Project $project) => $project->code, $projects);
     }
 }

@@ -11,8 +11,7 @@ use App\Entity\Label;
 use App\Entity\Milestone;
 use App\Entity\Project;
 use App\Entity\Team;
-use App\Entity\User;
-use App\Entity\Workspace;
+use App\Helper\UserHelper;
 use App\Transformer\TransformerChain;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
@@ -29,9 +28,7 @@ readonly class GenericProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        /** @var User $user */
-        $user = $this->tokenStorage->getToken()?->getUser();
-        $workspaceIds = $user->workspaces->map(fn(Workspace $workspace) => $workspace->getId())->toArray();
+        $workspaceIds = UserHelper::getWorkspaceIds($this->tokenStorage);
 
         switch ($operation->getClass()) {
             case \App\ApiResource\Component::class:
