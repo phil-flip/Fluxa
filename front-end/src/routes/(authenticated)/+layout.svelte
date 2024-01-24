@@ -13,6 +13,14 @@
     import ContextMenu from "$lib/ContextMenu.svelte";
     import {Pencil} from "lucide-svelte";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
+    import {browser} from "$app/environment";
+    import {goto} from "$app/navigation";
+
+    if (browser && !localStorage.getItem('token')) {
+        console.debug('User not logged in. Redirecting to the login page.');
+
+        goto('/login');
+    }
 
     export let data;
 </script>

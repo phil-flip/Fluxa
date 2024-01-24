@@ -1,23 +1,10 @@
-import type {Writable} from "svelte/store";
+import type {Invalidator, Subscriber, Unsubscriber, Writable} from "svelte/store";
 import {writable} from "svelte/store";
 import type {Component, Cycle, Group, Label, Milestone, Project, Task, Team} from "$src/api/schema/schema";
 import {RESOURCES} from "$src/api/schema/schema";
-import {browser} from '$app/environment';
 import type {ServerApiClient} from "$src/api/ServerApiClient";
 import {api} from "$src/api/ServerApiClient";
-
-export interface DataStore {
-    components?: Component[];
-    groups?: Group[];
-    projects?: Project[];
-    cycles?: Cycle[];
-    labels?: Label[];
-    milestones?: Milestone[];
-    teams?: Team[];
-    tasks?: Task[];
-    loading: boolean;
-    error: null | string;
-}
+import {browser} from "$app/environment";
 
 function addEventListeners() {
     // @ts-ignore
@@ -138,60 +125,84 @@ function updateTask(id: string, taskData: Partial<Task>) {
     });
 }
 
-function createDataStore(api: ServerApiClient) {
+export interface DataStore {
+    components?: Component[];
+    groups?: Group[];
+    projects?: Project[];
+    cycles?: Cycle[];
+    labels?: Label[];
+    milestones?: Milestone[];
+    teams?: Team[];
+    tasks?: Task[];
+    loading: boolean;
+    error: null | string;
+}
+
+let initialized = false;
+
+function createDataStore(api: ServerApiClient): Writable<DataStore> {
     const store = writable<DataStore>({
         loading: false,
         error: null,
     });
 
-    if (browser) {
+    async function load() {
         store.update(data => {
             data.loading = true;
 
             return data;
         });
 
-        addEventListeners();
+        try {
+            const [
+                teams,
+                projects,
+                tasks,
+                components,
+                groups,
+                cycles,
+                labels,
+                milestones,
+            ] = await Promise.all([
+                api.getTeams(),
+                api.getProjects(),
+                api.getTasks(),
+                api.getComponents(),
+                api.getGroups(),
+                api.getCycles(),
+                api.getLabels(),
+                api.getMilestones(),
+            ]);
+            store.set({
+                teams, projects, tasks, components, groups, cycles, labels, milestones,
+                loading: false,
+                error: null
+            });
 
-        (async () => {
-            console.debug('Loading initial data started');
+            console.info('Loading initial data succeeded');
+        } catch (error) {
+            console.error('Loading initial data failed', error);
 
-            try {
-                const [
-                    teams,
-                    projects,
-                    tasks,
-                    components,
-                    groups,
-                    cycles,
-                    labels,
-                    milestones,
-                ] = await Promise.all([
-                    api.getTeams(),
-                    api.getProjects(),
-                    api.getTasks(),
-                    api.getComponents(),
-                    api.getGroups(),
-                    api.getCycles(),
-                    api.getLabels(),
-                    api.getMilestones(),
-                ]);
-                store.set({
-                    teams, projects, tasks, components, groups, cycles, labels, milestones,
-                    loading: false,
-                    error: null
-                });
-
-                console.info('Loading initial data succeeded');
-            } catch (error) {
-                console.error('Loading initial data failed', error);
-
-                store.set({loading: false, error: error.message});
-            }
-        })();
+            store.set({loading: false, error: error.message});
+        }
     }
 
-    return store;
+    return {
+        ...store,
+        subscribe(run: Subscriber<T>, invalidate?: Invalidator<T>): Unsubscriber {
+            if (browser && localStorage.getItem('token') && !initialized) {
+                console.debug('Loading initial data started');
+
+                initialized = true;
+
+                load().then(() => {
+                    addEventListeners();
+                });
+            }
+
+            return store.subscribe(run, invalidate);
+        },
+    };
 }
 
 console.debug('export const dataStore: Writable<DataStore> = createDataStore(api);');
