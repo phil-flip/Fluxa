@@ -8,14 +8,14 @@ import {browser} from '$app/environment';
 export class DataStoreApiClient {
     public readonly ready: boolean = false;
 
-    constructor(private readonly dataStore: DataStore) {
+    constructor(private readonly data: DataStore) {
         // TODO: Move to dataStore, that is more logical
-        this.ready = browser && !this.dataStore.loading && !this.dataStore.error;
+        this.ready = browser && !this.data.loading && !this.data.error;
     }
 
     public getProjectsByTeamId(teamId: string): Project[] {
         const projectIds = new Set(
-            this.dataStore.teams
+            this.data.teams
                 .filter(team => team.id === teamId)
                 .flatMap(team => team.projectIds)
         );
@@ -25,7 +25,7 @@ export class DataStoreApiClient {
 
     public resolveTeamSlug(slug: string): string {
         // debugger;
-        const team = this.dataStore.teams.find(team => team.slug === slug);
+        const team = this.data.teams.find(team => team.slug === slug);
         if (!team) {
             throw new Error(`Team with slug "${slug}" was not found`);
         }
@@ -35,7 +35,7 @@ export class DataStoreApiClient {
 
     public resolveProjectCode(code: string): string {
         // debugger;
-        const project = this.dataStore.projects.find(project => project.code === code);
+        const project = this.data.projects.find(project => project.code === code);
         if (!project) {
             throw new Error(`Project with slug "${code}" was not found`);
         }
@@ -44,27 +44,27 @@ export class DataStoreApiClient {
     }
 
     public getProject(id: string) {
-        return this.dataStore.projects.find(project => project.id === id);
+        return this.data.projects.find(project => project.id === id);
     }
 
     public getProjectByCode(code: string) {
-        return this.dataStore.projects.find(project => project.code === code);
+        return this.data.projects.find(project => project.code === code);
     }
 
     public getMilestone(id: string) {
-        return this.dataStore.milestones.find(milestone => milestone.id === id);
+        return this.data.milestones.find(milestone => milestone.id === id);
     }
 
     public getComponent(id: string) {
-        return this.dataStore.components.find(components => components.id === id);
+        return this.data.components.find(components => components.id === id);
     }
 
     public getGroup(id: string) {
-        return this.dataStore.groups.find(group => group.id === id);
+        return this.data.groups.find(group => group.id === id);
     }
 
     public getLabel(id: string) {
-        return this.dataStore.labels.find(label => label.id === id);
+        return this.data.labels.find(label => label.id === id);
     }
 
     public getLabels(ids: string[]) {
@@ -80,19 +80,19 @@ export class DataStoreApiClient {
     }
 
     public getTeam(id: string) {
-        return this.dataStore.teams.find(team => team.id === id);
+        return this.data.teams.find(team => team.id === id);
     }
 
     public getTask(id: string) {
-        return this.dataStore.tasks.find(task => task.id === id);
+        return this.data.tasks.find(task => task.id === id);
     }
 
     public getTaskByNumberAndProjectId(number: number, projectId: string) {
-        return this.dataStore.tasks.find(task => task.number === number && task.projectId === projectId);
+        return this.data.tasks.find(task => task.number === number && task.projectId === projectId);
     }
 
     public getCycle(id: string) {
-        return this.dataStore.cycles.find(cycle => cycle.id === id);
+        return this.data.cycles.find(cycle => cycle.id === id);
     }
 }
 
