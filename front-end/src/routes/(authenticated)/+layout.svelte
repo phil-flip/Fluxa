@@ -11,7 +11,6 @@
     import {navigating} from "$app/stores";
     import Toast from "$lib/Toast.svelte";
     import ContextMenu from "$lib/ContextMenu.svelte";
-    import {Pencil} from "lucide-svelte";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
     import {browser} from "$app/environment";
     import {goto} from "$app/navigation";
@@ -31,52 +30,58 @@
     id="application-sidebar">
     <nav class="hs-accordion-group p-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
         <ul class="space-y-1.5 max-w-[100%]">
-            <li class="pb-1.5">
+<!--            <li class="pb-1.5">-->
+            <li>
                 <div class="flex justify-between">
                     <div class="flex">
-                        <div class="w-7">
-                            {#if $navigating}
+                        {#if $navigating}
+                            <div class="w-7">
                                 <Spinner color="blue" size={4}/>
-                            {/if}
-                        </div>
-                        <span class="font-bold">
-                            <a href="/">Fluxa</a>
-                        </span>
+                            </div>
+                        {/if}
+<!--                        <span class="font-bold">-->
+<!--                            <a href="/">Fluxa</a>-->
+<!--                        </span>-->
                     </div>
-                    <img alt="Image Description"
-                         class="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-gray-800"
-                         src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=320&amp;h=320&amp;q=80">
+                    <!--                    <img alt="Image Description"-->
+                    <!--                         class="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-gray-800"-->
+                    <!--                         src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=320&amp;h=320&amp;q=80">-->
                 </div>
             </li>
-            <li>
-                <a class="flex items-center gap-x-3.5 py-2 pr-2.5 text-sm text-slate-700 rounded-md hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300"
-                   href="/">
-                    <svg aria-hidden="true"
-                         class="icon_149cb72cec icon_149cb72cec leftIcon_8403aaa9cc noFocusStyle_9a0459292c"
-                         data-testid="icon" fill="currentColor" height="18"
-                         viewBox="0 0 20 20"
-                         width="18">
-                        <path clip-rule="evenodd"
-                              d="M5.99986 1.82129C6.41407 1.82129 6.74986 2.15708 6.74986 2.57129V4.10701H13.2499V2.57129C13.2499 2.15708 13.5856 1.82129 13.9999 1.82129C14.4141 1.82129 14.7499 2.15708 14.7499 2.57129V4.107H16.2856C16.7876 4.107 17.269 4.30643 17.624 4.66141C17.979 5.01639 18.1784 5.49784 18.1784 5.99986V16.2856C18.1784 16.7876 17.979 17.269 17.624 17.624C17.269 17.979 16.7876 18.1784 16.2856 18.1784H3.71415C3.21213 18.1784 2.73067 17.979 2.37569 17.624C2.02071 17.269 1.82129 16.7876 1.82129 16.2856V5.99986C1.82129 5.49784 2.02071 5.01639 2.37569 4.66141C2.73067 4.30643 3.21213 4.107 3.71415 4.107C3.763 4.107 3.81077 4.11168 3.85702 4.1206C3.90326 4.11168 3.95102 4.10701 3.99986 4.10701H5.24986V2.57129C5.24986 2.15708 5.58565 1.82129 5.99986 1.82129ZM5.24986 7.14272V5.60701H3.99986C3.95101 5.60701 3.90324 5.60234 3.85699 5.59342C3.81075 5.60233 3.76299 5.607 3.71415 5.607C3.60995 5.607 3.51003 5.64839 3.43635 5.72207C3.36268 5.79574 3.32129 5.89567 3.32129 5.99986V16.2856C3.32129 16.3898 3.36268 16.4897 3.43635 16.5634C3.51003 16.637 3.60995 16.6784 3.71415 16.6784H16.2856C16.3898 16.6784 16.4897 16.637 16.5634 16.5634C16.637 16.4897 16.6784 16.3898 16.6784 16.2856V5.99986C16.6784 5.89567 16.637 5.79574 16.5634 5.72207C16.4897 5.64839 16.3898 5.607 16.2856 5.607H14.7499V7.14272C14.7499 7.55693 14.4141 7.89272 13.9999 7.89272C13.5856 7.89272 13.2499 7.55693 13.2499 7.14272V5.60701H6.74986V7.14272C6.74986 7.55693 6.41407 7.89272 5.99986 7.89272C5.58565 7.89272 5.24986 7.55693 5.24986 7.14272ZM13.4214 9.92231C13.6942 9.61058 13.6626 9.13676 13.3509 8.864C13.0392 8.59124 12.5653 8.62283 12.2926 8.93455L8.75058 12.9825L7.02129 11.6856C6.68992 11.437 6.21982 11.5042 5.97129 11.8356C5.72276 12.1669 5.78992 12.637 6.12129 12.8856L8.407 14.5999C8.72086 14.8353 9.16309 14.789 9.42144 14.4937L13.4214 9.92231Z"
-                              fill="currentColor" fill-rule="evenodd"></path>
-                    </svg>
-                    My tasks
-                </a>
+            <li class="pb-4">
+                <Button class="text-sm w-full font-bold" on:click={() => ($formModal = true)} size="xs">
+                    Add task
+                </Button>
             </li>
-            <li>
-                <a class="flex items-center gap-x-3.5 py-2 pr-2.5 text-sm text-slate-700 rounded-md hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300"
-                   href="/">
-                    <Pencil/>
-                    My notes
-                </a>
-            </li>
-            <li class="pb-1.5">
-                <a class="flex items-center gap-x-3.5 py-2 pr-2.5 text-sm text-slate-700 rounded-md hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300"
-                   href="/projects">
-                    <ProjectIcon/>
-                    Projects
-                </a>
-            </li>
+            <!--            <li>-->
+            <!--                <a class="flex items-center gap-x-3.5 py-2 pr-2.5 text-sm text-slate-700 rounded-md hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300"-->
+            <!--                   href="/">-->
+            <!--                    <svg aria-hidden="true"-->
+            <!--                         class="icon_149cb72cec icon_149cb72cec leftIcon_8403aaa9cc noFocusStyle_9a0459292c"-->
+            <!--                         data-testid="icon" fill="currentColor" height="18"-->
+            <!--                         viewBox="0 0 20 20"-->
+            <!--                         width="18">-->
+            <!--                        <path clip-rule="evenodd"-->
+            <!--                              d="M5.99986 1.82129C6.41407 1.82129 6.74986 2.15708 6.74986 2.57129V4.10701H13.2499V2.57129C13.2499 2.15708 13.5856 1.82129 13.9999 1.82129C14.4141 1.82129 14.7499 2.15708 14.7499 2.57129V4.107H16.2856C16.7876 4.107 17.269 4.30643 17.624 4.66141C17.979 5.01639 18.1784 5.49784 18.1784 5.99986V16.2856C18.1784 16.7876 17.979 17.269 17.624 17.624C17.269 17.979 16.7876 18.1784 16.2856 18.1784H3.71415C3.21213 18.1784 2.73067 17.979 2.37569 17.624C2.02071 17.269 1.82129 16.7876 1.82129 16.2856V5.99986C1.82129 5.49784 2.02071 5.01639 2.37569 4.66141C2.73067 4.30643 3.21213 4.107 3.71415 4.107C3.763 4.107 3.81077 4.11168 3.85702 4.1206C3.90326 4.11168 3.95102 4.10701 3.99986 4.10701H5.24986V2.57129C5.24986 2.15708 5.58565 1.82129 5.99986 1.82129ZM5.24986 7.14272V5.60701H3.99986C3.95101 5.60701 3.90324 5.60234 3.85699 5.59342C3.81075 5.60233 3.76299 5.607 3.71415 5.607C3.60995 5.607 3.51003 5.64839 3.43635 5.72207C3.36268 5.79574 3.32129 5.89567 3.32129 5.99986V16.2856C3.32129 16.3898 3.36268 16.4897 3.43635 16.5634C3.51003 16.637 3.60995 16.6784 3.71415 16.6784H16.2856C16.3898 16.6784 16.4897 16.637 16.5634 16.5634C16.637 16.4897 16.6784 16.3898 16.6784 16.2856V5.99986C16.6784 5.89567 16.637 5.79574 16.5634 5.72207C16.4897 5.64839 16.3898 5.607 16.2856 5.607H14.7499V7.14272C14.7499 7.55693 14.4141 7.89272 13.9999 7.89272C13.5856 7.89272 13.2499 7.55693 13.2499 7.14272V5.60701H6.74986V7.14272C6.74986 7.55693 6.41407 7.89272 5.99986 7.89272C5.58565 7.89272 5.24986 7.55693 5.24986 7.14272ZM13.4214 9.92231C13.6942 9.61058 13.6626 9.13676 13.3509 8.864C13.0392 8.59124 12.5653 8.62283 12.2926 8.93455L8.75058 12.9825L7.02129 11.6856C6.68992 11.437 6.21982 11.5042 5.97129 11.8356C5.72276 12.1669 5.78992 12.637 6.12129 12.8856L8.407 14.5999C8.72086 14.8353 9.16309 14.789 9.42144 14.4937L13.4214 9.92231Z"-->
+            <!--                              fill="currentColor" fill-rule="evenodd"></path>-->
+            <!--                    </svg>-->
+            <!--                    My tasks-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a class="flex items-center gap-x-3.5 py-2 pr-2.5 text-sm text-slate-700 rounded-md hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300"-->
+            <!--                   href="/">-->
+            <!--                    <Pencil/>-->
+            <!--                    My notes-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li class="pb-1.5">-->
+            <!--                <a class="flex items-center gap-x-3.5 py-2 pr-2.5 text-sm text-slate-700 rounded-md hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300"-->
+            <!--                   href="/projects">-->
+            <!--                    <ProjectIcon/>-->
+            <!--                    Projects-->
+            <!--                </a>-->
+            <!--            </li>-->
             <li>
                 <div class="text-gray-600 font-bold text-sm">Your teams</div>
                 {#if $dataStore.teams}
@@ -119,13 +124,13 @@
                                                 Tasks
                                             </a>
                                         </li>
-                                        <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 pr-2.5 text-sm text-slate-700 rounded-md hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300"
-                                               href="/teams/{team.slug}/cycles">
-                                                <CycleIcon/>
-                                                Cycles
-                                            </a>
-                                        </li>
+<!--                                        <li>-->
+<!--                                            <a class="flex items-center gap-x-3.5 py-2 pr-2.5 text-sm text-slate-700 rounded-md hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300"-->
+<!--                                               href="/teams/{team.slug}/cycles">-->
+<!--                                                <CycleIcon/>-->
+<!--                                                Cycles-->
+<!--                                            </a>-->
+<!--                                        </li>-->
                                         <li>
                                             <div class="hs-accordion-group">
                                                 <div class="hs-accordion"

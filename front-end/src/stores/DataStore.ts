@@ -142,6 +142,14 @@ let initialized = false;
 
 function createDataStore(api: ServerApiClient): Writable<DataStore> {
     const store = writable<DataStore>({
+        components: [],
+        groups: [],
+        projects: [],
+        cycles: [],
+        labels: [],
+        milestones: [],
+        teams: [],
+        tasks: [],
         loading: false,
         error: null,
     });

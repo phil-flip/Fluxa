@@ -1,7 +1,6 @@
 <script lang="ts">
-    import {Button, Tooltip} from "flowbite-svelte";
-    import {formModal} from "$src/stores";
-    import {ArrowLeft, Plus} from 'lucide-svelte';
+    import {Tooltip} from "flowbite-svelte";
+    import {ArrowLeft} from 'lucide-svelte';
     import {createDropdownMenu, melt} from "@melt-ui/svelte";
     import {fly} from 'svelte/transition';
     import {context, GROUPS, LAYOUTS} from "$src/stores/ContextStore";
@@ -22,12 +21,6 @@
         states: {subOpen},
     } = createSubmenu();
 
-    const onShowTooltip = (event) => {
-        // Disabled for now, after an upgrade flowbite stopped sending the correct event.
-        // I've confirmed this is an issue in their own examples on:
-        // https://flowbite-svelte.com/docs/components/tooltip
-        // tooltipContent = event.target.dataset.tooltipContent;
-    };
     $: tooltipContent = '';
 </script>
 
@@ -53,86 +46,99 @@
     }
 </style>
 
-<header class="sm:justify-start sm:flex-nowrap border-b border-gray-200 text-sm py-3 sm:py-0 dark:bg-gray-800 dark:border-gray-700">
+<header
+    class="sm:justify-start sm:flex-nowrap border-b border-gray-200 text-sm py-3 sm:py-0 dark:bg-gray-800 dark:border-gray-700">
     <button class="p-2" on:click={()=>{history.back();}}>
         <ArrowLeft class="w-[100%] h-[100%]" size="20" strokeWidth="2"/>
     </button>
-    <a class="breadcrumb flex-none dark:text-white" href="#">{breadcrumb}</a>
-    <div class="search flex mr-1 flex-col gap-y-4 gap-x-4 mt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-y-0 sm:mt-0 sm:pl-7">
-        <div class="my-2">
-            <label class="sr-only" for="icon">Search</label>
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
-                    <svg class="h-4 w-4 text-gray-400" fill="currentColor" height="16" viewBox="0 0 16 16"
-                         width="16" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                    </svg>
-                </div>
-                <input class="py-1 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
-                       id="icon" name="icon"
-                       placeholder="Search"
-                       type="text">
-            </div>
-        </div>
+    <span class="breadcrumb flex-none dark:text-white pr-4">{breadcrumb}</span>
+    <div
+        class="search flex mr-1 flex-col gap-y-4 gap-x-4 mt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-y-0 sm:mt-0 sm:pl-7">
+<!--        <div class="my-2">-->
+<!--            <label class="sr-only" for="icon">Search</label>-->
+<!--            <div class="relative">-->
+<!--                <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">-->
+<!--                    <svg class="h-4 w-4 text-gray-400" fill="currentColor" height="16" viewBox="0 0 16 16"-->
+<!--                         width="16" xmlns="http://www.w3.org/2000/svg">-->
+<!--                        <path-->
+<!--                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>-->
+<!--                    </svg>-->
+<!--                </div>-->
+<!--                <input-->
+<!--                    class="py-1 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"-->
+<!--                    id="icon" name="icon"-->
+<!--                    placeholder="Search"-->
+<!--                    type="text">-->
+<!--            </div>-->
+<!--        </div>-->
 
         <div id="layouts">
-            <Tooltip on:show={onShowTooltip} triggeredBy="#layouts button[data-tooltip-content]">
-                {tooltipContent}
-            </Tooltip>
+<!--            <Tooltip triggeredBy="#layouts button[data-tooltip]">-->
+<!--                {tooltipContent}-->
+<!--            </Tooltip>-->
 
             <div class="flex items-center gap-x-1">
-                <button class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 bg-custom-sidebar-background-80"
-                        data-tooltip-content="List"
-                        on:click={()=>$context.layout=LAYOUTS.LIST}
-                        tabindex="0"
-                        type="button">
-                    <svg aria-hidden="true" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-57kesc"
-                         data-testid="FormatListBulletedOutlinedIcon" focusable="false" viewBox="0 0 24 24">
-                        <path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path>
-                    </svg>
-                </button>
-                <button class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 text-custom-sidebar-text-200"
-                        data-tooltip-content="Swimlanes"
-                        on:click={()=>$context.layout=LAYOUTS.SWIMLANES}
-                        tabindex="0"
-                        type="button">
-                    <svg aria-hidden="true" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-57kesc"
-                         data-testid="GridViewOutlinedIcon" focusable="false" viewBox="0 0 24 24">
-                        <path d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"></path>
-                    </svg>
-                </button>
-                <button class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 text-custom-sidebar-text-200"
-                        data-tooltip-content="Calendar"
-                        on:click={()=>$context.layout=LAYOUTS.CALENDAR}
-                        tabindex="0"
-                        type="button">
-                    <svg aria-hidden="true" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-57kesc"
-                         data-testid="CalendarMonthOutlinedIcon" focusable="false" viewBox="0 0 24 24">
-                        <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"></path>
-                    </svg>
-                </button>
-                <button class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 text-custom-sidebar-text-200"
-                        data-tooltip-content="Spreadsheet"
-                        on:click={()=>$context.layout=LAYOUTS.SPREADSHEET}
-                        tabindex="0"
-                        type="button">
-                    <svg aria-hidden="true" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-57kesc"
-                         data-testid="TableChartOutlinedIcon" focusable="false" viewBox="0 0 24 24">
-                        <path d="M20 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 2v3H5V5h15zm-5 14h-5v-9h5v9zM5 10h3v9H5v-9zm12 9v-9h3v9h-3z"></path>
-                    </svg>
-                </button>
-                <button class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 text-custom-sidebar-text-200"
-                        data-tooltip-content="Gantt chart"
-                        on:click={()=>$context.layout=LAYOUTS.GANTT}
-                        tabindex="0"
-                        type="button">
-                    <svg aria-hidden="true"
-                         class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium rotate-90 css-57kesc"
-                         data-testid="WaterfallChartOutlinedIcon" focusable="false"
-                         viewBox="0 0 24 24">
-                        <path d="M18 4h3v16h-3V4zM3 13h3v7H3v-7zm11-9h3v3h-3V4zm-4 1h3v4h-3V5zm-3 5h3v4H7v-4z"></path>
-                    </svg>
-                </button>
+<!--                <button-->
+<!--                    class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 bg-custom-sidebar-background-80"-->
+<!--                    data-tooltip-->
+<!--                    on:mouseenter={()=>{tooltipContent='List'}}-->
+<!--                    on:click={()=>$context.layout=LAYOUTS.LIST}-->
+<!--                    type="button">-->
+<!--                    <svg aria-hidden="true" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-57kesc"-->
+<!--                         data-testid="FormatListBulletedOutlinedIcon" focusable="false" viewBox="0 0 24 24">-->
+<!--                        <path-->
+<!--                            d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path>-->
+<!--                    </svg>-->
+<!--                </button>-->
+<!--                <button-->
+<!--                    class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 text-custom-sidebar-text-200"-->
+<!--                    data-tooltip-->
+<!--                    on:mouseenter={()=>{tooltipContent='Swimlanes'}}-->
+<!--                    on:click={()=>$context.layout=LAYOUTS.SWIMLANES}-->
+<!--                    type="button">-->
+<!--                    <svg aria-hidden="true" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-57kesc"-->
+<!--                         data-testid="GridViewOutlinedIcon" focusable="false" viewBox="0 0 24 24">-->
+<!--                        <path-->
+<!--                            d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"></path>-->
+<!--                    </svg>-->
+<!--                </button>-->
+<!--                <button-->
+<!--                    class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 text-custom-sidebar-text-200"-->
+<!--                    data-tooltip-->
+<!--                    on:mouseenter={()=>{tooltipContent='Calendar'}}-->
+<!--                    on:click={()=>$context.layout=LAYOUTS.CALENDAR}-->
+<!--                    type="button">-->
+<!--                    <svg aria-hidden="true" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-57kesc"-->
+<!--                         data-testid="CalendarMonthOutlinedIcon" focusable="false" viewBox="0 0 24 24">-->
+<!--                        <path-->
+<!--                            d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"></path>-->
+<!--                    </svg>-->
+<!--                </button>-->
+<!--                <button-->
+<!--                    class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 text-custom-sidebar-text-200"-->
+<!--                    data-tooltip-->
+<!--                    on:mouseenter={()=>{tooltipContent='Spreadsheet'}}-->
+<!--                    on:click={()=>$context.layout=LAYOUTS.SPREADSHEET}-->
+<!--                    type="button">-->
+<!--                    <svg aria-hidden="true" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-57kesc"-->
+<!--                         data-testid="TableChartOutlinedIcon" focusable="false" viewBox="0 0 24 24">-->
+<!--                        <path-->
+<!--                            d="M20 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 2v3H5V5h15zm-5 14h-5v-9h5v9zM5 10h3v9H5v-9zm12 9v-9h3v9h-3z"></path>-->
+<!--                    </svg>-->
+<!--                </button>-->
+<!--                <button-->
+<!--                    class="grid h-7 w-7 place-items-center rounded p-1 outline-none hover:bg-custom-sidebar-background-80 duration-300 text-custom-sidebar-text-200"-->
+<!--                    data-tooltip-->
+<!--                    on:mouseenter={()=>{tooltipContent='Gantt chart'}}-->
+<!--                    on:click={()=>$context.layout=LAYOUTS.GANTT}-->
+<!--                    type="button">-->
+<!--                    <svg aria-hidden="true"-->
+<!--                         class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium rotate-90 css-57kesc"-->
+<!--                         data-testid="WaterfallChartOutlinedIcon" focusable="false"-->
+<!--                         viewBox="0 0 24 24">-->
+<!--                        <path d="M18 4h3v16h-3V4zM3 13h3v7H3v-7zm11-9h3v3h-3V4zm-4 1h3v4h-3V5zm-3 5h3v4H7v-4z"></path>-->
+<!--                    </svg>-->
+<!--                </button>-->
 
                 <button class="my-2 py-1 px-2 inline-flex justify-center items-center gap-2 rounded-md border
                         font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2
@@ -156,10 +162,14 @@
                         <div class="flex justify-between mb-3">
                             <div class="flex items-center">Group by</div>
                             <select bind:value={$context.groupBy} class="text-sm text-gray-800">
-                                {#each Object.keys(GROUPS)
-                                    .filter(v => ![GROUPS.CYCLE, GROUPS.GROUP].includes(v)) as key}
-                                    <option value="{key}">{GROUPS[key].toLowerCase()}</option>
-                                {/each}
+                                <option value="{GROUPS.STATUS}">Status</option>
+                                <option value="{GROUPS.LABEL}">Label</option>
+                                <option value="{GROUPS.PROJECT}">Project</option>
+                                <option value="{GROUPS.GROUP}">Group</option>
+                                <option value="{GROUPS.MILESTONE}">Milestone</option>
+                                <option value="{GROUPS.COMPONENT}">Component</option>
+                                <option value="{GROUPS.CYCLE}">Cycle</option>
+                                <option value="{GROUPS.ASSIGNEE}">Assignee</option>
                             </select>
 
                             <!--                            <Radio-->
@@ -172,24 +182,17 @@
                             <!--                            </Radio>-->
 
                         </div>
-<!--                        <hr/>-->
-                        <div class="flex justify-between">
-                            <div class="flex items-center">Order by</div>
-                            <select class="text-sm text-gray-800">
-                                {#each Object.keys(GROUPS) as key}
-                                    <option value="{key}">{GROUPS[key].toLowerCase()}</option>
-                                {/each}
-                            </select>
-                        </div>
+                        <!--                        <hr/>-->
+                        <!--                        <div class="flex justify-between">-->
+                        <!--                            <div class="flex items-center">Order by</div>-->
+                        <!--                            <select class="text-sm text-gray-800">-->
+                        <!--                                {#each Object.keys(GROUPS) as key}-->
+                        <!--                                    <option value="{key}">{GROUPS[key].toLowerCase()}</option>-->
+                        <!--                                {/each}-->
+                        <!--                            </select>-->
+                        <!--                        </div>-->
                     </div>
                 {/if}
-
-                <div>
-                    <Button class="text-sm" on:click={() => ($formModal = true)} size="xs">
-                        <Plus class="w-3.5 h-3.5 mr-2" size="40"/>
-                        Add task
-                    </Button>
-                </div>
             </div>
         </div>
     </div>

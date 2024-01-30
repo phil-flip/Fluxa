@@ -8,8 +8,14 @@
     const getFilterValue = (choice: Cycle) => choice.name;
 </script>
 
-<Radio on:change choices="{choices}" name="cycleId" let:choice={choice} getValue="{getValue}" getFilterValue="{getFilterValue}" custom
-        {...$$restProps}>
+<Radio on:change
+       choices="{choices}"
+       name="cycleId"
+       let:choice={choice}
+       getValue="{getValue}"
+       getFilterValue="{getFilterValue}"
+       custom
+       {...$$restProps}>
     <svelte:fragment slot="button" let:selectedChoice={choice}>
         {#if choice}
             {choice.name}

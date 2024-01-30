@@ -13,7 +13,7 @@
     function updateContext(dataStore: DataStore, teamSlug: string) {
         if (browser && !dataStore.loading && !dataStore.error) {
             context.update(context => {
-                const team = dataStore.teams.find(team => team.slug === teamSlug);
+                const team = dataStore.teams!.find(team => team.slug === teamSlug);
                 const projectId = team?.projectIds?.[0];
 
                 return {

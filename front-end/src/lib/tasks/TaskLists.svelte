@@ -13,6 +13,7 @@
     import {context, GROUPS} from "$src/stores/ContextStore";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
     import {dataStore} from "$src/stores/DataStore";
+    import CenterBox from "../CenterBox.svelte";
 
     export let tasks: Task[];
     export let groupBy: GROUPS | undefined = undefined;
@@ -44,46 +45,24 @@
 </script>
 
 <style lang="scss">
-  .layout.swimlanes {
-    display: flex;
+    .layout.swimlanes {
+        display: flex;
 
-    :global(.grid-table) {
+        :global(.grid-table) {
+        }
     }
-  }
-
-  .wrapper {
-    display: flex;
-    flex-grow: 1;
-    justify-items: center;
-    align-items: center;
-
-    .empty {
-      box-shadow: rgba(0, 0, 0, 0.07) 0px 4px 44px;
-      border: 1px solid rgb(239, 241, 244);
-      border-radius: 8px;
-      padding: 3rem;
-      width: 450px;
-      height: auto;
-
-      p {
-        color: gray;
-      }
-    }
-  }
 </style>
 
-<div class="layout {$context.layout}">
-    {#each groupedTasks as [_id, title, tasks]}
-        <TaskList tasks="{tasks}" title="{title}"/>
-    {/each}
-
-</div>
 
 {#if groupedTasks.length === 0}
-    <div class="wrapper">
-        <div class="empty">
-            <h2>No tasks</h2>
-            <p>There are no tasks here yet. Create your first task now and it will show up here.</p>
-        </div>
+    <CenterBox>
+        <h2>No tasks</h2>
+        <p>There are no tasks here yet. Create your first task now and it will show up here.</p>
+    </CenterBox>
+{:else}
+    <div class="layout {$context.layout}">
+        {#each groupedTasks as [_id, title, tasks]}
+            <TaskList tasks="{tasks}" title="{title}"/>
+        {/each}
     </div>
 {/if}

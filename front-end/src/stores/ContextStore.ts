@@ -1,5 +1,8 @@
 import type {Writable} from "svelte/store";
-import {writable} from "svelte/store";
+import {get, writable} from "svelte/store";
+import type {DataStore} from "$src/stores/DataStore";
+import {dataStore} from "$src/stores/DataStore";
+import {browser} from "$app/environment";
 
 export enum LAYOUTS {
     LIST = 'list',
@@ -57,19 +60,18 @@ function createContextStore(): Writable<ContextStore> {
  */
 export const context = createContextStore();
 
+if (browser) {
+    dataStore.subscribe(({teams, loading, error}: DataStore) => {
+        const contextValue = get(context);
+        if (!error && !loading && !contextValue.teamId && teams && teams!.length > 0) {
+            context.update(context => {
+                context.teamId = teams![0].id ?? null;
+                if (context.teamId) {
+                    context.projectId = teams![0].projectIds[0];
+                }
 
-// TODO: Remove, this is not the right way
-//
-// dataStore.subscribe(({teams, tasks, error}: DataStore) => {
-//     if (!error) {
-//         context.update(context => {
-//             context.tasks = tasks;
-//             context.team = teams[0] ?? null;
-//             if (context.team?.projects?.length) {
-//                 context.project = context.team.projects[0];
-//             }
-//
-//             return context;
-//         });
-//     }
-// });
+                return context;
+            });
+        }
+    });
+}
