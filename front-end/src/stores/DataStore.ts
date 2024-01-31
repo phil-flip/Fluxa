@@ -138,6 +138,7 @@ export interface DataStore {
     error: null | string;
 }
 
+const LOCAL_STORAGE_KEY = 'data';
 let initialized = false;
 
 function createDataStore(api: ServerApiClient): Writable<DataStore> {
@@ -154,6 +155,14 @@ function createDataStore(api: ServerApiClient): Writable<DataStore> {
         error: null,
     });
 
+    if (browser) {
+        store.subscribe((value: DataStore) => {
+            if (initialized && !value.loading && !value.error) {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value));
+            }
+        });
+    }
+
     async function load() {
         store.update(data => {
             data.loading = true;
@@ -162,30 +171,35 @@ function createDataStore(api: ServerApiClient): Writable<DataStore> {
         });
 
         try {
-            const [
-                teams,
-                projects,
-                tasks,
-                components,
-                groups,
-                cycles,
-                labels,
-                milestones,
-            ] = await Promise.all([
-                api.getTeams(),
-                api.getProjects(),
-                api.getTasks(),
-                api.getComponents(),
-                api.getGroups(),
-                api.getCycles(),
-                api.getLabels(),
-                api.getMilestones(),
-            ]);
-            store.set({
-                teams, projects, tasks, components, groups, cycles, labels, milestones,
-                loading: false,
-                error: null
-            });
+            const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (storedData) {
+                store.set(JSON.parse(storedData));
+            } else {
+                const [
+                    teams,
+                    projects,
+                    tasks,
+                    components,
+                    groups,
+                    cycles,
+                    labels,
+                    milestones,
+                ] = await Promise.all([
+                    api.getTeams(),
+                    api.getProjects(),
+                    api.getTasks(),
+                    api.getComponents(),
+                    api.getGroups(),
+                    api.getCycles(),
+                    api.getLabels(),
+                    api.getMilestones(),
+                ]);
+                store.set({
+                    teams, projects, tasks, components, groups, cycles, labels, milestones,
+                    loading: false,
+                    error: null
+                });
+            }
 
             console.info('Loading initial data succeeded');
         } catch (error) {
