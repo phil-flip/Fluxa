@@ -2,6 +2,13 @@
     import Main from "$lib/layout/Main.svelte";
     import CenterBox from "$lib/CenterBox.svelte";
     import {dataStore} from "$src/stores/DataStore";
+    import {goto} from "$app/navigation";
+
+    $: {
+        if ($dataStore.teams?.length) {
+            goto(`/teams/${$dataStore.teams[0].slug}/tasks`);
+        }
+    }
 </script>
 
 <Main>
