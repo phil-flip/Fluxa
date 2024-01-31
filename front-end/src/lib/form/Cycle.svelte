@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Radio from "./Radio.svelte";
+    import Radio from "$lib/form/Radio.svelte";
     import type {Cycle} from "$src/api/schema/schema";
 
     export let choices: Cycle[];

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Checkbox from "./Checkbox.svelte";
+    import Checkbox from "$lib/form/Checkbox.svelte";
     import type {Component, NewComponent} from "$src/api/schema/schema";
     import {api} from "$src/api/ServerApiClient";
     import type {OnCreate} from "$src/lib/form/Choice";

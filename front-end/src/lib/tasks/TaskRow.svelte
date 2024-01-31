@@ -1,12 +1,12 @@
 <script lang="ts">
-    import MilestoneIcon from "../svg/MilestoneIcon.svelte";
-    import UrgentIcon from "../svg/UrgentIcon.svelte";
-    import ComponentIcon from "../svg/ComponentIcon.svelte";
-    import GroupIcon from "../svg/GroupIcon.svelte";
-    import ProjectIcon from "../svg/ProjectIcon.svelte";
+    import UrgentIcon from "$lib/svg/UrgentIcon.svelte";
+    import ComponentIcon from "$lib/svg/ComponentIcon.svelte";
+    import GroupIcon from "$lib/svg/GroupIcon.svelte";
+    import ProjectIcon from "$lib/svg/ProjectIcon.svelte";
     import {contextMenuData, contextMenuEvent} from "$src/stores/ContextMenuStore";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
     import type {Project, Status, Task, Team} from "$src/api/schema/schema";
+    import MilestoneIcon from "$lib/svg/MilestoneIcon.svelte";
 
     export let task: Task;
     export let i: number;

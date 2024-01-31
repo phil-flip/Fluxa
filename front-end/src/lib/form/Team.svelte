@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Radio from "./Radio.svelte";
+    import Radio from "$lib/form/Radio.svelte";
     import type {NewTeam, Team} from "$src/api/schema/schema";
     import {api} from "$src/api/ServerApiClient";
     import type {OnCreate} from "$src/lib/form/Choice";

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Radio from "./Radio.svelte";
+    import Radio from "$lib/form/Radio.svelte";
     import {Briefcase} from "lucide-svelte";
     import type {OnCreate} from "$src/lib/form/Choice";
     import type {NewProject, Project} from "$src/api/schema/schema";

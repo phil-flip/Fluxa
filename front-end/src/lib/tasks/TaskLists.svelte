@@ -13,7 +13,7 @@
     import {context, GROUPS} from "$src/stores/ContextStore";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
     import {dataStore} from "$src/stores/DataStore";
-    import CenterBox from "../CenterBox.svelte";
+    import CenterBox from "$lib/CenterBox.svelte";
 
     export let tasks: Task[];
     export let groupBy: GROUPS | undefined = undefined;

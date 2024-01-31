@@ -2,7 +2,6 @@
     import {ChevronRight} from 'lucide-svelte';
     import {contextMenuData, contextMenuEvent} from "$src/stores/ContextMenuStore";
     import type {Component, Cycle, Group, Label, Milestone, Project, Task, Team} from "$src/api/schema/schema";
-    import {dataStoreApiClient} from "../api/DataStoreApiClient";
     import StatusChoice from "$lib/form/Status.svelte";
     import MilestoneChoice from "$lib/form/Milestone.svelte";
     import LabelsChoice from "$lib/form/Labels.svelte";
@@ -13,6 +12,7 @@
     import {computePosition, flip} from "@floating-ui/dom";
     import {browser} from '$app/environment';
     import {onMount} from 'svelte';
+    import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
 
     // TODO: Check what users expect here. I tried both but I may prefer the one in which the user will navigate directly when a row is clicked.
     // This because we clearly indicate the row will cause navigation by using the pointer cursor.

@@ -1,5 +1,5 @@
 <script>
-    import TaskRow from "./TaskRow.svelte";
+    import TaskRow from "$lib/tasks/TaskRow.svelte";
 
     export let title;
     export let tasks;

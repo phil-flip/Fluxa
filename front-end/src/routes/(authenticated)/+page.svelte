@@ -1,7 +1,7 @@
 <script>
-    import Main from "../../lib/layout/Main.svelte";
-    import CenterBox from "../../lib/CenterBox.svelte";
-    import {dataStore} from "../../stores/DataStore";
+    import Main from "$lib/layout/Main.svelte";
+    import CenterBox from "$lib/CenterBox.svelte";
+    import {dataStore} from "$src/stores/DataStore";
 </script>
 
 <Main>

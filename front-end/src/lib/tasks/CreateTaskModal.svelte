@@ -5,7 +5,7 @@
     import TeamChoice from "$lib/form/Team.svelte";
     import {formModal} from "$src/stores";
     import type {Component, Cycle, Group, Label, Milestone, Project, Status} from "$src/api/schema/schema";
-    import LabelsChoice from "../form/Labels.svelte";
+    import LabelsChoice from "$lib/form/Labels.svelte";
     import {createToast} from "$src/stores/ToastStore";
     import {context} from "$src/stores/ContextStore";
     import {dataStore} from "$src/stores/DataStore";
@@ -17,7 +17,7 @@
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
     import {api} from "$src/api/ServerApiClient";
     import {dispatchDataChangeEvent} from "$src/utilities/EventDispatcher";
-    import {RESOURCES} from "../../api/schema/schema";
+    import {RESOURCES} from "$src/api/schema/schema";
 
     let teams = $dataStore.teams;
     let projects: Project[] = [];

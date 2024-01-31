@@ -1,4 +1,4 @@
-import type {TaskGrouper, TaskGroupWithLabelAndGroupId, TaskSelectorTuple} from "./TaskGrouper";
+import type {TaskGrouper, TaskGroupWithLabelAndGroupId, TaskSelectorTuple} from "$src/task/grouper/TaskGrouper";
 import type {Task} from "$src/api/schema/schema";
 import type {DataStoreApiClient} from "$src/api/DataStoreApiClient";
 

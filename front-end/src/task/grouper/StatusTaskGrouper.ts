@@ -1,4 +1,4 @@
-import type {TaskGrouper, TaskGroupWithLabelAndGroupId, TaskSelectorTuple} from "./TaskGrouper";
+import type {TaskGrouper, TaskGroupWithLabelAndGroupId, TaskSelectorTuple} from "$src/task/grouper/TaskGrouper";
 import type {Status, Task, Team} from "$src/api/schema/schema";
 
 export class StatusTaskGrouper implements TaskGrouper {
