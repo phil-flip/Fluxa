@@ -26,7 +26,9 @@
 
 <!-- Sidebar -->
 <div
-    class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[40] w-64 bg-white border-r border-gray-200 pb-10 overflow-y-auto scrollbar-y lg:block lg:translate-x-0 lg:right-auto lg:bottom-0 dark:scrollbar-y dark:bg-gray-800 dark:border-gray-700"
+    class="hs-overlay hs-overlay-open:translate-x-0 transition-all duration-300
+    fixed top-0 left-0 bottom-0 z-[40] w-64 bg-white border-r border-gray-200 pb-10 overflow-y-auto
+    scrollbar-y"
     id="application-sidebar">
     <nav class="hs-accordion-group p-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
         <ul class="space-y-1.5 max-w-[100%]">
@@ -192,7 +194,7 @@
 <!-- End Sidebar -->
 
 <!-- Content -->
-<div class="w-full lg:pl-64 flex flex-col grow">
+<div class="w-full pl-64 flex flex-col grow">
     <slot/>
 </div>
 
