@@ -1,9 +1,8 @@
 <script lang="ts">
-    import {Tooltip} from "flowbite-svelte";
     import {ArrowLeft} from 'lucide-svelte';
     import {createDropdownMenu, melt} from "@melt-ui/svelte";
     import {fly} from 'svelte/transition';
-    import {context, GROUPS, LAYOUTS} from "$src/stores/ContextStore";
+    import {context, GROUPS} from "$src/stores/ContextStore";
 
     export let breadcrumb;
 
@@ -44,6 +43,35 @@
             font-size: 1rem;
         }
     }
+
+    .view-wrapper {
+        border: 1px solid rgb(216, 216, 216);
+    }
+
+    .view {
+        font-size: .8rem;
+
+        .head {
+            font-weight: 500;
+            padding: 0.3rem 0;
+        }
+
+        label {
+            display: flex;
+            padding: 0.3rem 0;
+            align-items: center;
+        }
+
+        input[type='radio'] {
+            width: 12px;
+            height: 12px;
+            margin: 0 .2rem 0 0;
+
+            &:focus {
+                box-shadow: none;
+            }
+        }
+    }
 </style>
 
 <header
@@ -54,23 +82,23 @@
     <span class="breadcrumb flex-none dark:text-white pr-4">{breadcrumb}</span>
     <div
         class="search flex mr-1 flex-col gap-y-4 gap-x-4 mt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-y-0 sm:mt-0 sm:pl-7">
-<!--        <div class="my-2">-->
-<!--            <label class="sr-only" for="icon">Search</label>-->
-<!--            <div class="relative">-->
-<!--                <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">-->
-<!--                    <svg class="h-4 w-4 text-gray-400" fill="currentColor" height="16" viewBox="0 0 16 16"-->
-<!--                         width="16" xmlns="http://www.w3.org/2000/svg">-->
-<!--                        <path-->
-<!--                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>-->
-<!--                    </svg>-->
-<!--                </div>-->
-<!--                <input-->
-<!--                    class="py-1 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"-->
-<!--                    id="icon" name="icon"-->
-<!--                    placeholder="Search"-->
-<!--                    type="text">-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="my-2">-->
+        <!--            <label class="sr-only" for="icon">Search</label>-->
+        <!--            <div class="relative">-->
+        <!--                <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">-->
+        <!--                    <svg class="h-4 w-4 text-gray-400" fill="currentColor" height="16" viewBox="0 0 16 16"-->
+        <!--                         width="16" xmlns="http://www.w3.org/2000/svg">-->
+        <!--                        <path-->
+        <!--                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>-->
+        <!--                    </svg>-->
+        <!--                </div>-->
+        <!--                <input-->
+        <!--                    class="py-1 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"-->
+        <!--                    id="icon" name="icon"-->
+        <!--                    placeholder="Search"-->
+        <!--                    type="text">-->
+        <!--            </div>-->
+        <!--        </div>-->
 
         <div id="layouts">
 <!--            <Tooltip triggeredBy="#layouts button[data-tooltip]">-->
@@ -157,20 +185,44 @@
 
                 {#if $open}
                     <div use:melt={$menu} transition:fly={{ duration: 150, y: -10 }}
-                         class="w-72 h-72 z-10 mt-2 min-w-[15rem] bg-white shadow-md rounded-lg p-4 dark:bg-gray-800 dark:border dark:border-gray-700 dark:divide-gray-700
-                            text-sm text-gray-800">
-                        <div class="flex justify-between mb-3">
-                            <div class="flex items-center">Group by</div>
-                            <select bind:value={$context.groupBy} class="text-sm text-gray-800">
-                                <option value="{GROUPS.STATUS}">Status</option>
-                                <option value="{GROUPS.LABEL}">Label</option>
-                                <option value="{GROUPS.PROJECT}">Project</option>
-                                <option value="{GROUPS.GROUP}">Group</option>
-                                <option value="{GROUPS.MILESTONE}">Milestone</option>
-                                <option value="{GROUPS.COMPONENT}">Component</option>
-                                <option value="{GROUPS.CYCLE}">Cycle</option>
-                                <option value="{GROUPS.ASSIGNEE}">Assignee</option>
-                            </select>
+                         class="w-72 h-72 z-10 min-w-[15rem] bg-white shadow-md
+                         rounded-lg py-2 px-4 dark:bg-gray-800 dark:border dark:border-gray-700
+                         dark:divide-gray-700 text-sm text-gray-800 view-wrapper">
+                        <div class="view">
+                            <div class="head">Group by</div>
+                            <label>
+                                <input type="radio" bind:group={$context.groupBy} value="{GROUPS.STATUS}">
+                                Status
+                            </label>
+                            <label>
+                                <input type="radio" bind:group={$context.groupBy} value="{GROUPS.LABEL}">
+                                Label
+                            </label>
+                            <label>
+                                <input type="radio" bind:group={$context.groupBy} value="{GROUPS.PROJECT}">
+                                Project
+                            </label>
+                            <label>
+                                <input type="radio" bind:group={$context.groupBy} value="{GROUPS.GROUP}">
+                                Group
+                            </label>
+                            <label>
+                                <input type="radio" bind:group={$context.groupBy} value="{GROUPS.MILESTONE}">
+                                Milestone
+                            </label>
+                            <label>
+                                <input type="radio" bind:group={$context.groupBy} value="{GROUPS.COMPONENT}">
+                                Component
+                            </label>
+                            <label>
+                                <input type="radio" bind:group={$context.groupBy} value="{GROUPS.CYCLE}">
+                                Cycle
+                            </label>
+                            <label>
+                                <input type="radio" bind:group={$context.groupBy} value="{GROUPS.ASSIGNEE}">
+                                Assignee
+                            </label>
+
 
                             <!--                            <Radio-->
                             <!--                                    choices={Object.keys(GROUPS)}-->
