@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 @import "../node_modules/prosemirror-view/style/prosemirror.css";
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100;8..144,400;8..144,500;8..144,700&display=swap');
 
 html {
+    font-family: 'Roboto Flex', sans-serif;
     min-height: 100%;
     display: flex;
     flex-direction: column;
