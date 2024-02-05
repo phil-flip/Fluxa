@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+    export type ValueType = (string | number)[];
+</script>
+
 <script generics="Choice" lang="ts">
     import type {FilterType, GetFilterValue, GetValueType, OnCreate} from "$lib/form/Choice";
     import {ChoiceHandler, ChoicesFilter} from "$lib/form/Choice";
@@ -10,8 +14,6 @@
         default: { choice: Choice },
         button: { selectedChoices: Choice[] };
     }
-
-    type ValueType = (string | number)[];
 
     export let clickToShow: boolean = true;
     export let value: ValueType = [];
@@ -81,7 +83,7 @@
 
     let searchQuery = '';
     let open: boolean;
-    let checkboxGroup: ValueType = value;
+    export let checkboxGroup: ValueType = value;
 
     $: filterHandler = new ChoicesFilter<Choice>(filter, getFilterValue);
     $: choiceHandler = new ChoiceHandler<Choice>(choices, getValue);

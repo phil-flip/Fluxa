@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Radio from "$lib/form/Radio.svelte";
+    import Radio, {type ValueType} from "$lib/form/Radio.svelte";
     import {Briefcase} from "lucide-svelte";
     import type {OnCreate} from "$src/lib/form/Choice";
     import type {NewProject, Project} from "$src/api/schema/schema";
     import {api} from "$src/api/ServerApiClient";
 
-    export let value = '';
+    export let value: ValueType;
     export let choices: Project[];
     export let baseComponent: Partial<NewProject> | undefined = undefined;
 

@@ -1,7 +1,8 @@
 <script lang="ts">
-    import Radio from "$lib/form/Radio.svelte";
+    import Radio, {type ValueType} from "$lib/form/Radio.svelte";
     import type {Cycle} from "$src/api/schema/schema";
 
+    export let value: ValueType;
     export let choices: Cycle[];
 
     const getValue = (choice: Cycle) => choice.id;
@@ -15,6 +16,7 @@
        getValue="{getValue}"
        getFilterValue="{getFilterValue}"
        custom
+       bind:value
        {...$$restProps}>
     <svelte:fragment slot="button" let:selectedChoice={choice}>
         {#if choice}

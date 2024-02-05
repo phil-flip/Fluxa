@@ -1,14 +1,14 @@
 import {z} from "zod";
 
 export const schema = z.object({
-    projectId: z.string(),
-    teamId: z.string(),
+    projectId: z.string().uuid(),
+    teamId: z.string().uuid(),
     title: z.string(),
-    description: z.string(),
-    statusId: z.string(),
-    milestoneId: z.string(),
-    cycleId: z.string(),
+    description: z.string().optional(),
+    statusId: z.string().uuid().optional(),
+    milestoneId: z.string().uuid().optional(),
+    cycleId: z.string().uuid().optional(),
     labelIds: z.string().array(),
-    groupIds: z.string().array(),
+    projectGroupIds: z.string().array(),
     componentIds: z.string().array(),
 });

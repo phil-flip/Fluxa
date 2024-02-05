@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Checkbox from "$lib/form/Checkbox.svelte";
+    import Checkbox, {type ValueType} from "$lib/form/Checkbox.svelte";
     import type {Label, NewLabel} from "$src/api/schema/schema";
     import {api} from "$src/api/ServerApiClient";
     import type {OnCreate} from "$src/lib/form/Choice";
@@ -7,6 +7,7 @@
     export let choices: Label[];
     export let clickToShow: boolean = true;
     export let baseComponent: Partial<NewLabel> | undefined = undefined;
+    export let value: ValueType;
 
     const onCreate: OnCreate<Label> = async (value: string) => {
         return await api.postLabel({
@@ -17,7 +18,6 @@
 
     const getValue = (choice: Label) => choice.id;
     const getFilterValue = (choice: Label) => choice.name;
-    let value: Checkbox<Label>['value'];
 </script>
 
 <style lang="scss">
@@ -36,7 +36,7 @@
 <!-- Check if bind:value is still needed -->
 <div>
     <Checkbox {...$$restProps}
-              bind:value
+              bind:checkboxGroup={value}
               choices="{[...choices].sort((a,b)=>a.name.localeCompare(b.name))}"
               clickToShow="{clickToShow}"
               custom

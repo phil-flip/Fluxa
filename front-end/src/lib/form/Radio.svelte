@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+    export type ValueType = string | number | undefined;
+</script>
+
 <script generics="Choice" lang="ts">
     import {Button, Dropdown, Radio, Search} from "flowbite-svelte";
     import type {FilterType, GetFilterValue, GetValueType, OnCreate} from "$lib/form/Choice";
@@ -11,11 +15,11 @@
         button: { selectedChoice: Choice | undefined };
     }
 
-    type ValueType = string | number;
-
+    export let touched: boolean = false;
+    export let required: boolean = false;
     export let clickToShow: boolean = true;
     export let enableSearch: boolean = true;
-    export let value: ValueType = '';
+    export let value: ValueType = undefined;
     export let name: string | undefined = undefined;
     export let choices: Choice[];
     export let getValue: GetValueType<Choice>;
@@ -47,8 +51,9 @@
     }
 
     function onChange(event: Event) {
-        closeDropDown();
+        touched = true;
 
+        closeDropDown();
         event.stopPropagation();
         dispatchChangeEvent();
     }
@@ -92,6 +97,8 @@
     let searchQuery = '';
     let open: boolean;
 
+    $: isValid = !(touched && required && !value);
+    $: buttonClasses = !isValid ? 'border-red-600' : '';
     $: choiceHandler = new ChoiceHandler<Choice>(choices, getValue);
     $: filteredChoices = enableSearch ? filterHandler.getFilteredChoices(choices, searchQuery) : choices;
     $: selectedChoice = choiceHandler.choicesMap.get(value as string);
@@ -104,36 +111,55 @@
     li.choice:focus-within {
         outline: 2px solid;
     }
+
+    .radio {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .error {
+        padding-top: .2rem;
+        font-size: .8rem;
+        color: rgb(224 36 36);
+    }
 </style>
 
 {#if clickToShow}
-    <Button class="whitespace-nowrap" color="alternative" size="xs">
-        <slot name="button" selectedChoice="{selectedChoice}"></slot>
-    </Button>
-    <Dropdown bind:open class="overflow-y-auto px-3 pb-3 text-sm h-44" tabindex={-2}>
-        <!--        Not supported right now, fix after update to Svelte 5 with snippets:-->
-        <!--        See: https://svelte-5-preview.vercel.app/docs/snippets#snippets-and-slots -->
-        <!--{#if enableSearch}-->
-        <div class="p-3" slot="header">
-            <Search autofocus bind:value={searchQuery} size="md"/>
-        </div>
-        <!--{/if}-->
-        {#if onCreate && searchQuery && filteredChoices.length === 0}
-            <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
-                <Radio on:click={internalOnCreate} class="p-2" custom>
-                    <Plus strokeWidth="3" style="width: 20px;height: 20px;margin-right: .3rem"/>
-                    {searchQuery}
-                </Radio>
-            </li>
+    <div class="radio">
+        <Button class="whitespace-nowrap {buttonClasses}" color="alternative" size="xs">
+            <slot name="button" selectedChoice="{selectedChoice}"></slot>
+        </Button>
+        <Dropdown bind:open class="overflow-y-auto px-3 pb-3 text-sm h-44" tabindex={-2}>
+            <!--        Not supported right now, fix after update to Svelte 5 with snippets:-->
+            <!--        See: https://svelte-5-preview.vercel.app/docs/snippets#snippets-and-slots -->
+            <!--{#if enableSearch}-->
+            <div class="p-3" slot="header">
+                <Search autofocus bind:value={searchQuery} size="md"/>
+            </div>
+            <!--{/if}-->
+            {#if onCreate && searchQuery && filteredChoices.length === 0}
+                <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
+                    <Radio on:click={internalOnCreate} class="p-2" custom>
+                        <Plus strokeWidth="3" style="width: 20px;height: 20px;margin-right: .3rem"/>
+                        {searchQuery}
+                    </Radio>
+                </li>
+            {/if}
+            {#each filteredChoices as choice}
+                <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
+                    <Radio on:change={onChange} bind:group={value} value="{getValue(choice)}" {...$$restProps}
+                           class="p-2">
+                        <slot choice={choice}/>
+                    </Radio>
+                </li>
+            {/each}
+        </Dropdown>
+        {#if !isValid}
+            <div class="error">
+                This field is required
+            </div>
         {/if}
-        {#each filteredChoices as choice}
-            <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
-                <Radio on:change={onChange} bind:group={value} value="{getValue(choice)}" {...$$restProps} class="p-2">
-                    <slot choice={choice}/>
-                </Radio>
-            </li>
-        {/each}
-    </Dropdown>
+    </div>
 {:else}
     {#if enableSearch}
         <div class="p-3">
@@ -161,8 +187,4 @@
             </li>
         {/each}
     </ul>
-{/if}
-
-{#if name && value !== undefined }
-    <input type="hidden" name="{name}" value="{value}"/>
 {/if}

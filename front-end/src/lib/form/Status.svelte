@@ -1,7 +1,8 @@
 <script lang="ts">
-    import Radio from "$lib/form/Radio.svelte";
+    import Radio, {type ValueType} from "$lib/form/Radio.svelte";
     import type {Status} from "$src/api/schema/schema";
 
+    export let value: ValueType;
     export let choices: Status[];
     export let clickToShow: boolean = true;
 
@@ -16,6 +17,7 @@
        getValue="{getValue}"
        let:choice={choice}
        name="statusId"
+       bind:value
        on:change>
     <svelte:fragment let:selectedChoice={choice} slot="button">
         {#if choice}

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Checkbox from "$lib/form/Checkbox.svelte";
+    import Checkbox, {type ValueType} from "$lib/form/Checkbox.svelte";
     import type {Component, NewComponent} from "$src/api/schema/schema";
     import {api} from "$src/api/ServerApiClient";
     import type {OnCreate} from "$src/lib/form/Choice";
@@ -7,6 +7,7 @@
     export let choices: Component[];
     export let clickToShow: boolean = true;
     export let baseComponent: Partial<NewComponent> | undefined = undefined;
+    export let value: ValueType;
 
     const onCreate: OnCreate<Component> = async (value: string) => {
         return await api.postComponent({
@@ -17,11 +18,10 @@
 
     const getValue = (choice: Component) => choice.id;
     const getFilterValue = (choice: Component) => choice.name;
-    let value: Checkbox<Component>['value'];
 </script>
 
 <Checkbox {...$$restProps}
-          bind:value
+          bind:checkboxGroup={value}
           choices="{[...choices].sort((a,b)=>a.name.localeCompare(b.name))}"
           clickToShow="{clickToShow}"
           getFilterValue="{getFilterValue}"

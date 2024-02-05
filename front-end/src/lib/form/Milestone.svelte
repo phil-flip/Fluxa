@@ -3,7 +3,9 @@
     import type {Milestone, NewMilestone} from "$src/api/schema/schema";
     import type {OnCreate} from "$src/lib/form/Choice";
     import {api} from "$src/api/ServerApiClient";
+    import type {ValueType} from "$lib/form/Radio.svelte";
 
+    export let value: ValueType;
     export let choices: Milestone[];
     export let clickToShow: boolean = true;
     export let baseComponent: Partial<NewMilestone> | undefined = undefined;
@@ -16,7 +18,6 @@
     }
     const getValue = (choice: Milestone) => choice.id;
     const getFilterValue = (choice: Milestone) => choice.name;
-    let value: Radio<Milestone>['value'];
 </script>
 
 <Radio {...$$restProps}
