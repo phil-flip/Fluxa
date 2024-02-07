@@ -222,6 +222,10 @@
                                 <input type="radio" bind:group={$context.groupBy} value="{GROUPS.ASSIGNEE}">
                                 Assignee
                             </label>
+                            <label>
+                                <input type="radio" bind:group={$context.groupBy} value="{GROUPS.NO_GROUPING}">
+                                No grouping
+                            </label>
 
 
                             <!--                            <Radio-->

@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
     import TaskRow from "$lib/tasks/TaskRow.svelte";
 
-    export let title;
+    export let title: string | null;
     export let tasks;
 </script>
 
@@ -29,19 +29,21 @@
 <div aria-rowcount="{tasks.length}"
      class="grid-table text-sm text-gray-600 dark:text-gray-400 bg-white"
      role="grid">
-    <div class="heading" tabindex="-1">
-        <div>{title}</div>
-        <div>
-            <button class="
+    {#if title !== null}
+        <div class="heading" tabindex="-1">
+            <div>{title}</div>
+            <div>
+                <button class="
             text-sm font-semibold text-gray-800 dark:text-gray-200
             px-4 inline-flex justify-center items-center gap-2 rounded-md
             border border-transparent
             transition-all dark:focus:ring-offset-gray-800" data-hs-overlay="#modal"
-                    type="button">
-                +
-            </button>
+                        type="button">
+                    +
+                </button>
+            </div>
         </div>
-    </div>
+    {/if}
     {#each tasks as task, i}
         <TaskRow task="{task}" i="{i}"/>
     {/each}

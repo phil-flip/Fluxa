@@ -30,6 +30,6 @@ export function groupTasksByProperty(tasks: Task[], grouper: TaskGrouper): TaskG
 
 export interface TaskGrouper {
     select: (task: Task) => TaskSelectorTuple[],
-    getLabel: (id: string | undefined) => string,
+    getLabel: (id: string | undefined) => string | null,
     sorter?: SortFunction
 }

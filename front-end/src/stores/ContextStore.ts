@@ -21,6 +21,7 @@ export enum GROUPS {
     MILESTONE = 'MILESTONE',
     PROJECT = 'PROJECT',
     ASSIGNEE = 'ASSIGNEE',
+    NO_GROUPING = 'NO_GROUPING',
 }
 
 export interface ContextStore {

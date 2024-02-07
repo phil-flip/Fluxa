@@ -1,6 +1,6 @@
 <script lang="ts">
     import TaskList from "$lib/tasks/TaskList.svelte";
-    import {groupTasksByProperty} from "$src/task/grouper/TaskGrouper";
+    import {groupTasksByProperty, type TaskGroupsWithLabelAndGroupId} from "$src/task/grouper/TaskGrouper";
     import {MilestoneTaskGrouper} from "$src/task/grouper/MilestoneTaskGrouper";
     import type {Task} from "$src/api/schema/schema";
     import {GroupTaskGrouper} from "$src/task/grouper/GroupTaskGrouper";
@@ -14,11 +14,12 @@
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
     import {dataStore} from "$src/stores/DataStore";
     import CenterBox from "$lib/CenterBox.svelte";
+    import {NoGroupingTaskGrouper} from "$src/task/grouper/NoGroupingTaskGrouper";
 
     export let tasks: Task[];
     export let groupBy: GROUPS | undefined = undefined;
 
-    function getGroups(tasks: Task[], groupBy: GROUPS) {
+    function getGroups(tasks: Task[], groupBy: GROUPS): TaskGroupsWithLabelAndGroupId {
         switch (groupBy) {
             case GROUPS.MILESTONE:
                 return groupTasksByProperty(tasks, new MilestoneTaskGrouper($dataStoreApiClient));
@@ -36,6 +37,8 @@
                 return groupTasksByProperty(tasks, new LabelTaskGrouper($dataStoreApiClient));
             case GROUPS.GROUP:
                 return groupTasksByProperty(tasks, new GroupTaskGrouper($dataStoreApiClient));
+            case GROUPS.NO_GROUPING:
+                return groupTasksByProperty(tasks, new NoGroupingTaskGrouper());
             default:
                 throw new Error(`Unknown group by: ${groupBy}`);
         }
