@@ -85,14 +85,13 @@
         open = false;
     }
 
-    // TODO: This is now disabled, if it is not needed, remove it
-    // function validateValue() {
-    //     if (value && !choiceHandler.choicesMap.has(value)) {
-    //         console.debug('Value not found in choicesMap, value has been reset to an empty string.');
-    //
-    //         value = '';
-    //     }
-    // }
+    function validateValue() {
+        if (value && !choiceHandler.choicesMap.has(value as string)) {
+            console.debug(`Radio ${name}: Value (${value}) not found in choicesMap, value has been reset to an empty string.`);
+
+            value = undefined;
+        }
+    }
 
     let searchQuery = '';
     let open: boolean;
@@ -102,8 +101,7 @@
     $: choiceHandler = new ChoiceHandler<Choice>(choices, getValue);
     $: filteredChoices = enableSearch ? filterHandler.getFilteredChoices(choices, searchQuery) : choices;
     $: selectedChoice = choiceHandler.choicesMap.get(value as string);
-    // $: validateValue(choices, value);
-
+    $: validateValue(choices, value);
     $: onChangeSelectedChoice(selectedChoice);
 </script>
 

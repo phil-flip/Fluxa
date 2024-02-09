@@ -35,21 +35,17 @@
         console.log('updateForm', formData);
 
         const team = formData.teamId ? $dataStoreApiClient.getTeam(formData.teamId) : undefined;
-        if (team) {
-            projects = $dataStoreApiClient.getProjectsByTeamId(team.id);
-            cycles = team.cycleIds.map(id => $dataStoreApiClient.getCycle(id));
-            statuses = team.workflow.statuses;
-            labels = team.labelIds.map(id => $dataStoreApiClient.getLabel(id));
-        }
+        projects = team ? $dataStoreApiClient.getProjectsByTeamId(team.id) : [];
+        cycles = team ? team.cycleIds.map(id => $dataStoreApiClient.getCycle(id)) : [];
+        statuses = team ? team.workflow.statuses : [];
+        labels = team ? team.labelIds.map(id => $dataStoreApiClient.getLabel(id)) : [];
 
         const project = formData.projectId ? $dataStoreApiClient.getProject(formData.projectId) : undefined;
-        if (project) {
-            milestones = project.milestoneIds.map(id => $dataStoreApiClient.getMilestone(id));
-            components = project.componentIds.map(id => $dataStoreApiClient.getComponent(id));
-            projectGroups = project.groupIds.map(id => $dataStoreApiClient.getGroup(id));
-        }
+        milestones = project ? project.milestoneIds.map(id => $dataStoreApiClient.getMilestone(id)) : [];
+        components = project ? project.componentIds.map(id => $dataStoreApiClient.getComponent(id)) : [];
+        projectGroups = project ? project.groupIds.map(id => $dataStoreApiClient.getGroup(id)) : [];
 
-        if (formData.statusId === undefined) {
+        if (!statuses.some(status => status.id === formData.statusId)) {
             formData.statusId = statuses.find(status => status.name === 'Backlog')?.id;
         }
     }
