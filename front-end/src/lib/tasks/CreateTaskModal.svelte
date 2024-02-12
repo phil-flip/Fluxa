@@ -173,36 +173,40 @@
                     </div>
                     <div class="flex flex-wrap items-start gap-2">
                         <!--                        <Choice placeholder="Assigned to" choices="{assignees}" name="assignee"/>-->
-                        <StatusChoice
-                            bind:value="{formData.statusId}"
-                            choices="{statuses}"
-                            required
-                        />
-                        <CycleChoice
-                            bind:value="{formData.cycleId}"
-                            choices="{[...cycles.values()]}"
-                        />
-                        <MilestoneChoice
-                            bind:value="{formData.milestoneId}"
-                            baseComponent="{{projectId: formData.projectId}}"
-                            choices="{[...milestones.values()]}"
-                        />
-                        <LabelsChoice
-                            bind:value="{formData.labelIds}"
-                            baseComponent="{{teamId: formData.teamId}}"
-                            choices="{[...labels.values()]}"
-                        />
-                        <GroupsChoice
-                            bind:value="{formData.projectGroupIds}"
-                            name="projectGroupIds"
-                            baseComponent="{{projectId: formData.projectId}}"
-                            choices="{[...projectGroups.values()]}"
-                        />
-                        <ComponentsChoice
-                            bind:value="{formData.componentIds}"
-                            baseComponent="{{projectId: formData.projectId}}"
-                            choices="{[...components.values()]}"
-                        />
+                        {#if formData.teamId}
+                            <StatusChoice
+                                bind:value="{formData.statusId}"
+                                choices="{statuses}"
+                                required
+                            />
+                            <CycleChoice
+                                bind:value="{formData.cycleId}"
+                                choices="{[...cycles.values()]}"
+                            />
+                            <LabelsChoice
+                                bind:value="{formData.labelIds}"
+                                baseComponent="{{teamId: formData.teamId}}"
+                                choices="{[...labels.values()]}"
+                            />
+                        {/if}
+                        {#if formData.projectId}
+                            <GroupsChoice
+                                bind:value="{formData.projectGroupIds}"
+                                label="Groups"
+                                baseComponent="{{projectId: formData.projectId}}"
+                                choices="{[...projectGroups.values()]}"
+                            />
+                            <ComponentsChoice
+                                bind:value="{formData.componentIds}"
+                                baseComponent="{{projectId: formData.projectId}}"
+                                choices="{[...components.values()]}"
+                            />
+                            <MilestoneChoice
+                                bind:value="{formData.milestoneId}"
+                                baseComponent="{{projectId: formData.projectId}}"
+                                choices="{[...milestones.values()]}"
+                            />
+                        {/if}
                     </div>
                 </div>
             </div>
