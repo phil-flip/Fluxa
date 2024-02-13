@@ -14,67 +14,8 @@
     import StatusChoice from "$lib/form/Status.svelte";
     import {api} from "$src/api/ServerApiClient";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
-    import {EditorState} from "prosemirror-state";
-    import {EditorView} from "prosemirror-view";
-    import {defaultMarkdownParser, defaultMarkdownSerializer, schema} from "prosemirror-markdown";
-    import {baseKeymap} from "prosemirror-commands"
-    import {keymap} from "prosemirror-keymap"
-    import {placeholder} from "$src/editor/plugin/placeholder";
-    import {createKeyMap} from "$src/editor/plugin/keymap";
-    import {history} from "prosemirror-history"
-
-    let descriptionEditorView: EditorView;
-
-    function initializeEditor(task: Task) {
-        console.debug('initializeEditor on: ', descriptionElement);
-
-        if (descriptionEditorView) {
-            console.debug('Existing editor found, will destroy that first');
-            descriptionEditorView.destroy();
-        }
-
-        const state = EditorState.create({
-                doc: defaultMarkdownParser.parse(task.description ?? ''),
-                schema,
-                plugins: [
-                    placeholder(),
-                    keymap(baseKeymap),
-                    keymap(createKeyMap(schema)),
-                    history(),
-                ],
-            })
-        ;
-
-        descriptionEditorView = new EditorView(descriptionElement, {
-            state,
-            handleDOMEvents: {
-                'blur': () => {
-                    const description = defaultMarkdownSerializer.serialize(descriptionEditorView.state.doc);
-
-                    const currentDescription = task.description ?? '';
-                    if (description !== currentDescription) {
-                        api.putTask(task.id, {description: description});
-                    }
-                }
-            },
-            // dispatchTransaction(transaction) {
-            //     const newState = descriptionEditorView.state.apply(transaction);
-            //     descriptionEditorView.updateState(newState);
-            //
-            //     // Serialize the editor content to Markdown when it changes
-            //     const markdownOutput = defaultMarkdownSerializer.serialize(newState.doc);
-            //     console.log(markdownOutput); // Do something with the Markdown output
-            // }
-        });
-
-        return () => {
-            descriptionEditorView.destroy();
-        };
-    }
-
-    $: if (descriptionElement && task) {
-        initializeEditor(task);
-    }
+    import SingleLineEditor from "$lib/form/SingleLineEditor.svelte";
+    import MarkdownEditor from "$lib/form/MarkdownEditor.svelte";
 
     function onChange(event: Event & { currentTarget: EventTarget & HTMLInputElement | HTMLTextAreaElement }) {
         const payload = {
@@ -116,8 +57,6 @@
         labels = team.labelIds!.map(id => $dataStoreApiClient.getLabel(id));
     }
 
-    let descriptionElement: HTMLElement;
-
     $: ready = task && project;
 </script>
 
@@ -150,25 +89,6 @@
         padding: 0;
         cursor: text;
     }
-
-    .description {
-        position: relative;
-        margin-top: 1rem;
-        font-size: .9rem;
-
-        &:global(.placeholder:before) {
-            position: absolute;
-            top: 0;
-            left: 0;
-            content: attr(data-placeholder);
-            color: #6B7280;
-            pointer-events: none;
-        }
-
-        :global(p) {
-            margin-bottom: 1rem;
-        }
-    }
 </style>
 
 <Header breadcrumb="{`${$page.params.project_code}-${$page.params.task_number}`}"/>
@@ -176,14 +96,17 @@
 {#if ready}
     <Main>
         <div class="m-4">
-            <input type="text"
-                   name="title"
-                   on:change={onChange}
-                   class="text-xl text-gray-900 dark:text-white w-full my-3"
-                   value="{task.title}"
+            <SingleLineEditor value={task.title}
+                              onSave={value => {
+                                api.putTask(task.id, {title: value});
+                              }}
             />
-            <div bind:this={descriptionElement} class="description"
-                 data-placeholder="Add description.."></div>
+            <MarkdownEditor value={task.description ?? ''}
+                            data-placeholder="Add description.."
+                            onSave={value => {
+                                api.putTask(task.id, {description: value});
+                            }}
+            />
 
             <Hr classHr="my-8"/>
         </div>
