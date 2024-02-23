@@ -20,11 +20,10 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class User
 {
     #[Groups(['read'])]
-    public string $id;
+    public ?string $id = null;
 
-    #[NotBlank(groups: ['post'])]
     #[Groups(['read', 'write'])]
-    public string $name;
+    public ?string $name = null;
 
     #[NotBlank(groups: ['post'])]
     #[Groups(['read', 'write'])]
@@ -33,12 +32,10 @@ class User
     #[Groups(['read', 'write'])]
     public ?string $photoUrl = null;
 
-    #[NotBlank(groups: ['post'])]
     #[Groups(['write'])]
     #[ApiProperty(description: 'A plain text password')]
-    public string $password;
+    public ?string $password = null;
 
-    #[NotBlank(groups: ['post'])]
     #[Groups(['write'])]
-    public string $workspaceId;
+    public ?string $workspaceId = null;
 }

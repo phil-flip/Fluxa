@@ -22,8 +22,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Column(type: 'string', nullable: true)]
     public ?string $password;
 
-    #[Column(type: 'string')]
-    public string $name;
+    #[Column(type: 'string', nullable: true)]
+    public ?string $name;
 
     #[Column(type: 'string', nullable: true)]
     public ?string $photoUrl;

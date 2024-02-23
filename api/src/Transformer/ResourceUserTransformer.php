@@ -6,7 +6,6 @@ use App\ApiResource\User as Input;
 use App\Entity\User as Output;
 use App\Entity\Workspace;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
@@ -23,15 +22,17 @@ readonly class ResourceUserTransformer extends AbstractTransformer implements Tr
     public function transform($data, array $context = []): Output
     {
         $resource = new Output();
+        $resource->emailAddress = $data->emailAddress;
         $resource->name = $data->name;
         $resource->photoUrl = $data->photoUrl;
-        $resource->emailAddress = $data->emailAddress;
 
         if ($data->password) {
             $resource->password = $this->passwordHasher->hashPassword($resource, $data->password);
         }
 
-        $resource->workspaces->add($this->entityManager->getReference(Workspace::class, $data->workspaceId));
+        if ($data->workspaceId) {
+            $resource->workspaces->add($this->entityManager->getReference(Workspace::class, $data->workspaceId));
+        }
 
         return $resource;
     }
