@@ -117,7 +117,7 @@
      on:contextmenu={(event)=>{
         event.preventDefault();
 
-        $contextMenuData = {task};
+        $contextMenuData = {taskId: task.id};
         $contextMenuEvent = event;
     }}
      role="row"

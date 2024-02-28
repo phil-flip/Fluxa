@@ -120,9 +120,9 @@
     $: if ($contextMenuData) {
         console.debug('Loading context menu items');
 
-        task = $contextMenuData.task;
-        project = $dataStoreApiClient.getProject($contextMenuData.task.projectId);
-        team = $dataStoreApiClient.getTeam($contextMenuData.task.teamId);
+        task = $dataStoreApiClient.getTask($contextMenuData.taskId);
+        project = $dataStoreApiClient.getProject(task.projectId);
+        team = $dataStoreApiClient.getTeam(task.teamId);
         projects = $dataStoreApiClient.getProjectsByTeamId(team.id);
         milestones = project.milestoneIds.map(id => $dataStoreApiClient.getMilestone(id));
         components = project.componentIds.map(id => $dataStoreApiClient.getComponent(id));
