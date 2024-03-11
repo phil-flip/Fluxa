@@ -12,6 +12,7 @@ use App\Entity\Project as ProjectEntity;
 use App\Entity\Status as StatusEntity;
 use App\Entity\Task as TaskEntity;
 use App\Entity\Team as TeamEntity;
+use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -20,7 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 readonly class ResourceTaskTransformer extends AbstractTransformer implements Transformer
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager, private TaskRepository $taskRepository)
     {
     }
 
@@ -37,6 +38,9 @@ readonly class ResourceTaskTransformer extends AbstractTransformer implements Tr
         $taskEntity->title = $data->title;
         $taskEntity->description = $data->description;
         $taskEntity->status = $this->entityManager->find(StatusEntity::class, $data->statusId);
+        if ($taskEntity->getId() && $taskEntity->project->getId() !== $data->projectId) {
+            $taskEntity->number = $this->taskRepository->getNextTaskNumber($data->projectId);
+        }
         $taskEntity->project = $this->entityManager->find(ProjectEntity::class, $data->projectId);
         $taskEntity->team = $this->entityManager->find(TeamEntity::class, $data->teamId);
         $taskEntity->cycle = $data->cycleId ? $this->entityManager->find(CycleEntity::class, $data->cycleId) : null;
