@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Transformer\TransformerChain;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -44,6 +45,9 @@ class PatchTaskAction extends AbstractController
 
         $this->entityManager->flush();
 
-        return new Response(null, Response::HTTP_NO_CONTENT);
+        return new JsonResponse(
+            $this->transformer->transform($taskEntity),
+            Response::HTTP_RESET_CONTENT
+        );
     }
 }
