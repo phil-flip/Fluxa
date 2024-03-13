@@ -11,6 +11,8 @@
     import Toast from "$lib/Toast.svelte";
     import ContextMenu from "$lib/ContextMenu.svelte";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
+    import DiscordIcon from "$lib/svg/DiscordIcon.svelte";
+    import {Mail} from 'lucide-svelte';
 </script>
 
 <!-- Sidebar -->
@@ -182,7 +184,16 @@
         </ul>
         <div class="text-red-500 text-sm text-center">
             <span class="block mb-1">This is a pre-alpha version. Expect bugs!</span>
-            <a class="text-sm font-bold text-center block" href="mailto:support@fluxa.app">Report</a>
+            <a class="border rounded py-2 px-3 mb-2 border-primary-700 text-primary-700 text-sm w-full flex items-center justify-center"
+               href="mailto:support@fluxa.app" target="_blank">
+                <Mail class="mr-1"/>
+                Report
+            </a>
+            <a class="border rounded py-2 px-3 border-primary-700 text-primary-700 text-sm w-full block"
+               href="https://discord.gg/SdnparkQ" target="_blank">
+                <DiscordIcon class="mr-1"/>
+                Join on Discord
+            </a>
         </div>
     </nav>
 </div>
