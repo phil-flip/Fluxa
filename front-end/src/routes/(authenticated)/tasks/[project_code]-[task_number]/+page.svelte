@@ -1,10 +1,25 @@
+<script lang="ts" context="module">
+    function updateProperty(currentTask: Task, updatedProperties: Partial<Task>): void {
+        api.putTask(currentTask.id, updatedProperties);
+    }
+</script>
+
 <script lang="ts">
     import Header from "$lib/layout/Header.svelte";
     import RightSideBar from "$lib/layout/RightSideBar.svelte";
     import Main from "$lib/layout/Main.svelte";
     import {page} from "$app/stores";
     import {Hr} from "flowbite-svelte";
-    import type {Component, Cycle, Group, Label, Milestone, Project, Task, Team} from "$src/api/schema/schema";
+    import {
+        type Component,
+        type Cycle,
+        type Group,
+        type Label,
+        type Milestone,
+        type Project,
+        type Task,
+        type Team
+    } from "$src/api/schema/schema";
     import ProjectChoice from "$lib/form/Project.svelte";
     import ComponentsChoice from "$lib/form/Components.svelte";
     import GroupsChoice from "$lib/form/Groups.svelte";
@@ -16,48 +31,62 @@
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
     import SingleLineEditor from "$lib/form/SingleLineEditor.svelte";
     import MarkdownEditor from "$lib/form/MarkdownEditor.svelte";
+    import {goto} from "$app/navigation";
 
-    function onChange(event: Event & { currentTarget: EventTarget & HTMLInputElement | HTMLTextAreaElement }) {
-        const payload = {
-            [event.currentTarget.name]: event.currentTarget.value
+    $: taskNumber = $page.params.task_number;
+    $: projectCode = $page.params.project_code;
+
+    $: project = $dataStoreApiClient.getProjectByCode(projectCode);
+    let task: Task | undefined;
+    let taskId: string | undefined;
+    $: if (task && project && task.projectId !== project.id) {
+        const project = $dataStoreApiClient.getProject(task.projectId);
+        console.debug('The linked project has been changed. Updating the URL accordingly.');
+        goto(`/tasks/${project.code}-${task.number}`, {replaceState: true});
+    }
+    $: if (dataStoreApiClientReady && taskNumber && project) {
+        if (taskId) {
+            task = $dataStoreApiClient.getTask(taskId);
+        } else {
+            task = $dataStoreApiClient.getTaskByNumberAndProjectId(parseInt(taskNumber), project.id);
+            taskId = task.id;
         }
-
-        api.putTask(task.id, payload);
     }
-
-    function updateProperty(currentTask: Task, updateTaskPayload: object, updatedProperties: Partial<Task>) {
-        api.putTask(task.id, updateTaskPayload);
+    let team: Team | undefined;
+    $: if (dataStoreApiClientReady && task?.teamId) {
+        team = $dataStoreApiClient.getTeam(task.teamId)
     }
-
-    let task: Task;
-    let project: Project;
-    let team: Team;
-
-    // Form values
-    let projects: Project[];
-    let milestones: Milestone[];
-    let components: Component[];
-    let projectGroups: Group[];
-    let cycles: Cycle[];
-    let labels: Label[];
-
-    $: if ($dataStoreApiClient.ready) {
-        project = $dataStoreApiClient.getProjectByCode($page.params.project_code);
-        task = $dataStoreApiClient.getTaskByNumberAndProjectId(
-            parseInt($page.params.task_number),
-            project.id
-        );
-        team = $dataStoreApiClient.getTeam(task.teamId);
-
+    let projects: Project[] = [];
+    $: if (dataStoreApiClientReady && task?.teamId) {
         projects = $dataStoreApiClient.getProjectsByTeamId(task.teamId);
+    }
+    let milestones: Milestone[] = [];
+    $: if (dataStoreApiClientReady && project) {
         milestones = project.milestoneIds.map(id => $dataStoreApiClient.getMilestone(id));
+    }
+    let components: Component[] = [];
+    $: if (dataStoreApiClientReady && project) {
         components = project.componentIds.map(id => $dataStoreApiClient.getComponent(id));
+    }
+    let projectGroups: Group[] = [];
+    $: if (dataStoreApiClientReady && project) {
         projectGroups = project.groupIds.map(id => $dataStoreApiClient.getGroup(id));
+    }
+    let cycles: Cycle[] = [];
+    $:if (dataStoreApiClientReady && team) {
         cycles = team.cycleIds.map(id => $dataStoreApiClient.getCycle(id));
+    }
+    let labels: Label[] = [];
+    $: if (dataStoreApiClientReady && team) {
         labels = team.labelIds!.map(id => $dataStoreApiClient.getLabel(id));
     }
 
-    $: ready = task && project;
+    $: if (task && project &&
+        (parseInt($page.params.task_number) !== task.number || $page.params.project_code !== project.code)) {
+        goto(`/tasks/${project.code}-${task.number}`, {replaceState: true});
+    }
+
+    $: dataStoreApiClientReady = $dataStoreApiClient.ready;
 </script>
 
 <style lang="scss">
@@ -93,7 +122,7 @@
 
 <Header breadcrumb="{`${$page.params.project_code}-${$page.params.task_number}`}"/>
 
-{#if ready}
+{#if task && project && team}
     <Main>
         <div class="m-4">
             <SingleLineEditor value={task.title}
@@ -116,7 +145,7 @@
                 <div>
                     <StatusChoice value={task.statusId} choices="{team.workflow.statuses}"
                                   on:change={(event)=>{
-                                          updateProperty(task, {statusId: event.detail.value}, {status: event.detail.choice});
+                                          updateProperty(task, {statusId: event.detail.value});
                                       }}/>
                 </div>
                 <div>Labels</div>
@@ -125,7 +154,7 @@
                                   choices="{labels}"
                                   baseComponent="{{teamId: team.id}}"
                                   on:change={(event)=>{
-                                          updateProperty(task, {labelIds: event.detail.values}, {labels: event.detail.choices});
+                                          updateProperty(task, {labelIds: event.detail.values});
                                   }}/>
                 </div>
                 <div>Components</div>
@@ -134,7 +163,7 @@
                                       choices="{components}"
                                       baseComponent="{{projectId: project.id}}"
                                       on:change={(event)=>{
-                                          updateProperty(task, {componentIds: event.detail.values}, {components: event.detail.choices});
+                                          updateProperty(task, {componentIds: event.detail.values});
                                       }}/>
                 </div>
                 <!--                <hr>-->
@@ -154,7 +183,7 @@
                                   choices="{projectGroups}"
                                   baseComponent="{{projectId: project.id}}"
                                   on:change={(event)=>{
-                                          updateProperty(task, {projectGroupIds: event.detail.values}, {projectGroups: event.detail.choices});
+                                          updateProperty(task, {projectGroupIds: event.detail.values});
                                       }}/>
                 </div>
                 <!--                <div>Project labels</div>-->
@@ -175,7 +204,7 @@
                                          // TODO: project.milestones should also be updated, since there is one extra milestone after add.
                                          // This happened by reference at first, but we changed it to an assignment to trigger reactivity
                                          //         choices = [...choices, newChoice];
-                                          updateProperty(task, {milestoneId: event.detail.value}, {milestone: event.detail.choice});
+                                          updateProperty(task, {milestoneId: event.detail.value});
                                       }}/>
                 </div>
                 <div>Cycle</div>
@@ -183,7 +212,7 @@
                     <CycleChoice value={task.cycleId}
                                  choices="{cycles}"
                                  on:change={(event)=>{
-                                          updateProperty(task, {cycleId: event.detail.value}, {cycle: event.detail.choice});
+                                          updateProperty(task, {cycleId: event.detail.value});
                                       }}/>
                 </div>
                 <div>Project</div>
@@ -192,7 +221,8 @@
                         <ProjectChoice value={task.projectId}
                                        choices="{projects}"
                                        on:change={(event)=>{
-                                          updateProperty(task, {projectId: event.detail.value}, {project: event.detail.choice});
+                                          const projectId = event.detail.value;
+                                          updateProperty(task, {projectId});
                                   }}/>
                     {/if}
                 </div>
