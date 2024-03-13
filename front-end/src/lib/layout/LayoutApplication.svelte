@@ -16,11 +16,12 @@
 <!-- Sidebar -->
 <div
     class="hs-overlay hs-overlay-open:translate-x-0 transition-all duration-300
-    fixed top-0 left-0 bottom-0 z-[40] w-64 bg-white border-r border-gray-200 pb-10 overflow-y-auto
-    scrollbar-y"
+    fixed top-0 left-0 bottom-0 z-[40] w-64 bg-white border-r border-gray-200 overflow-y-auto
+    scrollbar-y
+    flex"
     id="application-sidebar">
-    <nav class="hs-accordion-group p-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
-        <ul class="space-y-1.5 max-w-[100%]">
+    <nav class="hs-accordion-group p-6 w-full flex flex-col flex-wrap grow" data-hs-accordion-always-open>
+        <ul class="space-y-1.5 max-w-[100%] grow">
             <!--            <li class="pb-1.5">-->
             <li>
                 <div class="flex justify-between">
@@ -179,6 +180,10 @@
                 {/if}
             </li>
         </ul>
+        <div class="text-red-500 text-sm text-center">
+            <span class="block mb-1">This is a pre-alpha version. Expect bugs!</span>
+            <a class="text-sm font-bold text-center block" href="mailto:support@fluxa.app">Report</a>
+        </div>
     </nav>
 </div>
 <!-- End Sidebar -->
