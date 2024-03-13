@@ -57,7 +57,7 @@ export class ServerApiClient {
     }
 
     async putTask(id: string, taskData: Partial<Task>): Promise<void> {
-        await fetch(`${this.baseUrl}/tasks/${id}`, {
+        const updatedTask = await fetch(`${this.baseUrl}/tasks/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/merge-patch+json',
@@ -70,7 +70,7 @@ export class ServerApiClient {
         dispatchDataChangeEvent({
             action: 'UPDATE',
             resource_type: RESOURCES.TASK,
-            resource: taskData,
+            resource: await updatedTask.json(),
             id: id,
         });
     }
