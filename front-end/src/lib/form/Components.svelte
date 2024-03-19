@@ -28,10 +28,8 @@
           getValue="{getValue}"
           onCreate="{onCreate}"
           let:choice={choice}
-          multiple
           name="componentIds"
-          on:change
-          placeholder="Labels">
+          on:change>
     <svelte:fragment let:selectedChoices={choices} slot="button">
         {#if choices.length}
             <span class="ml-1">{choices.length} components</span>

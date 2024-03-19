@@ -30,10 +30,8 @@
     getFilterValue="{getFilterValue}"
     getValue="{getValue}"
     let:choice={choice}
-    multiple
     on:change
-    onCreate="{onCreate}"
-    placeholder="Labels">
+    onCreate="{onCreate}">
     <svelte:fragment let:selectedChoices={choices} slot="button">
         {#if choices.length}
             <span class="ml-1">{choices.length} {label.toLowerCase()}</span>

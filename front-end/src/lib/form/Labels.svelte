@@ -44,11 +44,9 @@
               getFilterValue="{getFilterValue}"
               getValue="{getValue}"
               let:choice={choice}
-              multiple
               name="labelIds"
               on:change
-              onCreate="{onCreate}"
-              placeholder="Labels">
+              onCreate="{onCreate}">
         <svelte:fragment let:selectedChoices={choices} slot="button">
             {#if choices.length}
                 {#each choices as choice}
