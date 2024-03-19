@@ -107,29 +107,45 @@
     }
 
     // Menu values
-    let task: Task;
-    let project: Project;
-    let team: Team;
+    $: taskId = $contextMenuData?.taskId;
+    let task: Task | undefined;
+    $: if (dataStoreApiClientReady && taskId) {
+        task = $dataStoreApiClient.getTask(taskId);
+    }
+    let project: Project | undefined;
+    $: if (dataStoreApiClientReady && task?.projectId) {
+        project = $dataStoreApiClient.getProject(task.projectId)
+    }
+    let team: Team | undefined;
+    $: if (dataStoreApiClientReady && task?.teamId) {
+        team = $dataStoreApiClient.getTeam(task.teamId)
+    }
     let projects: Project[] = [];
+    $: if (dataStoreApiClientReady && task?.teamId) {
+        projects = $dataStoreApiClient.getProjectsByTeamId(task.teamId);
+    }
     let milestones: Milestone[] = [];
-    let components: Component[] = [];
-    let projectGroups: Group[] = [];
-    let cycles: Cycle[] = [];
-    let labels: Label[] = [];
-
-    $: if ($contextMenuData) {
-        console.debug('Loading context menu items');
-
-        task = $dataStoreApiClient.getTask($contextMenuData.taskId);
-        project = $dataStoreApiClient.getProject(task.projectId);
-        team = $dataStoreApiClient.getTeam(task.teamId);
-        projects = $dataStoreApiClient.getProjectsByTeamId(team.id);
+    $: if (dataStoreApiClientReady && project) {
         milestones = project.milestoneIds.map(id => $dataStoreApiClient.getMilestone(id));
+    }
+    let components: Component[] = [];
+    $: if (dataStoreApiClientReady && project) {
         components = project.componentIds.map(id => $dataStoreApiClient.getComponent(id));
+    }
+    let projectGroups: Group[] = [];
+    $: if (dataStoreApiClientReady && project) {
         projectGroups = project.groupIds.map(id => $dataStoreApiClient.getGroup(id));
+    }
+    let cycles: Cycle[] = [];
+    $:if (dataStoreApiClientReady && team) {
         cycles = team.cycleIds.map(id => $dataStoreApiClient.getCycle(id));
+    }
+    let labels: Label[] = [];
+    $: if (dataStoreApiClientReady && team) {
         labels = team.labelIds!.map(id => $dataStoreApiClient.getLabel(id));
     }
+
+    $: dataStoreApiClientReady = $dataStoreApiClient.ready;
 
     // This part should be done in an action I think, now it will be executed over and over while
     // it should only execute once per event
