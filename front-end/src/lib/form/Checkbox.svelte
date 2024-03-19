@@ -5,9 +5,9 @@
 <script generics="Choice" lang="ts">
     import type {FilterType, GetFilterValue, GetValueType, OnCreate} from "$lib/form/Choice";
     import {ChoiceHandler, ChoicesFilter} from "$lib/form/Choice";
-    import {Button, Checkbox, Dropdown, Search} from "flowbite-svelte";
+    import {Button, Dropdown, Search} from "flowbite-svelte";
     import {createEventDispatcher} from "svelte";
-    import {Plus} from "lucide-svelte";
+    import CheckboxItems from "$lib/form/CheckboxItems.svelte";
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface $$Slots {
@@ -27,8 +27,6 @@
 
     const dispatch = createEventDispatcher();
 
-    let pendingChangeEventForCreatedChoice = false;
-
     async function internalOnCreate(event: Event) {
         if (!onCreate) {
             throw new Error('No onCreate callback provided.');
@@ -38,41 +36,37 @@
 
         const newChoice = await onCreate(searchQuery);
 
-        pendingChangeEventForCreatedChoice = true;
-
         // Use assignment (instead of push) to make sure reactive statements are triggered
-        choices = [...choices, newChoice];
+        // choices = [...choices, newChoice];
         checkboxGroup = [...checkboxGroup, getValue(newChoice)];
+        searchQuery = '';
+
+        dispatchChangeEvent(getSelectedChoices(checkboxGroup));
     }
 
-    function onChange(event: Event) {
+    function onChange(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+        const value = event.currentTarget.value;
+        const index = checkboxGroup.findIndex(groupItemValue => groupItemValue === value);
+        const checked = event.currentTarget.checked;
+
+        if (checked && index === -1) {
+            checkboxGroup = [...checkboxGroup, value];
+        } else if (!checked && index !== -1) {
+            checkboxGroup.splice(index, 1);
+            checkboxGroup = checkboxGroup;
+        }
+
         event.stopPropagation();
-        dispatchChangeEvent();
+        dispatchChangeEvent(getSelectedChoices(checkboxGroup));
     }
 
-    function dispatchChangeEvent() {
+    function dispatchChangeEvent(selectedChoices: Choice[]) {
         dispatch('change', {
             values: selectedChoices.map(choice => getValue(choice)),
             choices: selectedChoices,
         });
 
         console.debug('Change event dispatched');
-    }
-
-    // TODO: This is not called anymore, why NOT?
-    //     $: onChangeSelectedChoices(selectedChoices);
-    // So selectedChoices is not updated?
-    // This is also applied to the radio
-    function onChangeSelectedChoices(selectedChoices: Choice[]) {
-        console.debug('onChangeSelectedChoices called with:');
-        console.debug(selectedChoices);
-
-        if (pendingChangeEventForCreatedChoice) {
-            console.debug('pendingChangeEventForCreatedChoice');
-
-            pendingChangeEventForCreatedChoice = false;
-            dispatchChangeEvent();
-        }
     }
 
     function getSelectedChoices(checkboxGroup: ValueType): Choice[] {
@@ -89,15 +83,7 @@
     $: choiceHandler = new ChoiceHandler<Choice>(choices, getValue);
     $: filteredChoices = filterHandler.getFilteredChoices(choices, searchQuery);
     $: selectedChoices = getSelectedChoices(checkboxGroup);
-
-    $: onChangeSelectedChoices(selectedChoices);
 </script>
-
-<style lang="scss">
-  li.choice:focus-within {
-    outline: 2px solid;
-  }
-</style>
 
 {#if clickToShow}
     <Button class="button whitespace-nowrap" color="alternative" size="xs">
@@ -110,44 +96,20 @@
             <Search autofocus bind:value={searchQuery} size="md"/>
         </div>
         <!--{/if}-->
-        {#if searchQuery && filteredChoices.length === 0}
-            <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
-                <Checkbox on:change={internalOnCreate} class="p-2" value="placeholder">
-                    <Plus strokeWidth="3" style="width: 20px;height: 20px;margin-right: .3rem"/>
-                    {searchQuery}
-                </Checkbox>
-            </li>
-        {/if}
-        {#each filteredChoices as choice}
-            <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
-                <Checkbox on:change={onChange} bind:group={checkboxGroup} value="{getValue(choice)}" {...$$restProps}
-                          class="p-2">
-                    <slot choice={choice}/>
-                </Checkbox>
-            </li>
-        {/each}
+        <CheckboxItems searchQuery={searchQuery} filteredChoices={filteredChoices} internalOnCreate={internalOnCreate}
+                       getValue={getValue} checkboxGroup={checkboxGroup} onChange={onChange} let:choice>
+            <slot choice={choice}/>
+        </CheckboxItems>
     </Dropdown>
 {:else}
     <div class="p-3">
         <Search autofocus bind:value={searchQuery} size="md"/>
     </div>
     <ul>
-        {#if searchQuery && filteredChoices.length === 0}
-            <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
-                <Checkbox on:change={internalOnCreate} class="p-2" value="placeholder">
-                    <Plus strokeWidth="3" style="width: 20px;height: 20px;margin-right: .3rem"/>
-                    {searchQuery}
-                </Checkbox>
-            </li>
-        {/if}
-        {#each filteredChoices as choice}
-            <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
-                <Checkbox on:change={onChange} bind:group={checkboxGroup} value="{getValue(choice)}" {...$$restProps}
-                          class="p-2">
-                    <slot choice={choice}/>
-                </Checkbox>
-            </li>
-        {/each}
+        <CheckboxItems searchQuery={searchQuery} filteredChoices={filteredChoices} internalOnCreate={internalOnCreate}
+                       getValue={getValue} checkboxGroup={checkboxGroup} onChange={onChange} let:choice>
+            <slot choice={choice}/>
+        </CheckboxItems>
     </ul>
 {/if}
 

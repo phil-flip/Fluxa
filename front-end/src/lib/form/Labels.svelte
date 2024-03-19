@@ -21,16 +21,20 @@
 </script>
 
 <style lang="scss">
-  div {
-    display: contents;
-  }
+    div {
+        display: contents;
+    }
 
-  div :global(input[type="checkbox"]:checked ~ span), :global(.labels input[type="checkbox"]:checked ~ span) {
-    background-image: url("data:image/svg+xml,%3csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3e %3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M1 5.917 5.724 10.5 15 1.5'/%3e %3c/svg%3e");
-    background-size: 55%;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
+    div :global(input[type="checkbox"]) {
+        display: none;
+    }
+
+    div :global(input[type="checkbox"]:checked ~ span), :global(.labels input[type="checkbox"]:checked ~ span) {
+        background-image: url("data:image/svg+xml,%3csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3e %3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M1 5.917 5.724 10.5 15 1.5'/%3e %3c/svg%3e");
+        background-size: 55%;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 </style>
 
 <!-- Check if bind:value is still needed -->
@@ -39,7 +43,6 @@
               bind:checkboxGroup={value}
               choices="{[...choices].sort((a,b)=>a.name.localeCompare(b.name))}"
               clickToShow="{clickToShow}"
-              custom
               dropdownClass="labels"
               getFilterValue="{getFilterValue}"
               getValue="{getValue}"
@@ -50,8 +53,8 @@
         <svelte:fragment let:selectedChoices={choices} slot="button">
             {#if choices.length}
                 {#each choices as choice}
-                <span class="w-2 h-2 rounded-full inline-block"
-                      style="background-color: {choice.properties.color}"/>
+                    <span class="w-2 h-2 rounded-full inline-block"
+                          style="background-color: {choice.properties.color}"/>
                 {/each}
                 <span class="ml-1">{choices.length} labels</span>
             {:else}
