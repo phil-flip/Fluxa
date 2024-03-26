@@ -10,7 +10,7 @@
     import {AssigneeTaskGrouper} from "$src/task/grouper/AssigneeTaskGrouper";
     import {ComponentTaskGrouper} from "$src/task/grouper/ComponentTaskGrouper";
     import {LabelTaskGrouper} from "$src/task/grouper/LabelTaskGrouper";
-    import {context, GROUPS} from "$src/stores/ContextStore";
+    import {context, GROUPS, STATES} from "$src/stores/ContextStore";
     import {dataStoreApiClient} from "$src/api/DataStoreApiClient";
     import {dataStore} from "$src/stores/DataStore";
     import CenterBox from "$lib/CenterBox.svelte";
@@ -44,7 +44,13 @@
         }
     }
 
-    $: groupedTasks = getGroups(tasks, groupBy ?? $context.groupBy);
+    const finishedStates = $dataStore.teams?.flatMap(team => team.workflow.statuses)
+        .filter(status => [STATES.COMPLETED, STATES.CANCELED].includes(status.state))
+        .map(status => status.id);
+    console.debug('finishedStates', finishedStates);
+
+    $: viewTasks = $context.showFinished ? tasks : tasks.filter(task => !finishedStates.includes(task.statusId));
+    $: groupedTasks = getGroups(viewTasks, groupBy ?? $context.groupBy);
 </script>
 
 <style lang="scss">

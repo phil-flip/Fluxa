@@ -15,6 +15,7 @@ readonly class EntityStatusTransformer extends AbstractTransformer implements Tr
         $resource = new StatusResource();
         $resource->id = $data->getId();
         $resource->name = $data->name;
+        $resource->state = $data->state->value;
         $resource->sortOrder = $data->state->value;
 
         return $resource;

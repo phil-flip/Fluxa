@@ -36,6 +36,7 @@ export interface NewComponent {
 export interface Status {
     id: string;
     name: string;
+    state: number;
     sortOrder: number;
 }
 

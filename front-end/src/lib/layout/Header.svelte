@@ -51,6 +51,12 @@
     .view {
         font-size: .8rem;
 
+        &:not(:last-of-type) {
+            padding-bottom: .2rem;
+            margin-bottom: .2rem;
+            border-bottom: 1px solid lightgray;
+        }
+
         .head {
             font-weight: 500;
             padding: 0.3rem 0;
@@ -62,7 +68,7 @@
             align-items: center;
         }
 
-        input[type='radio'] {
+        input[type='radio'], input[type='checkbox'] {
             width: 12px;
             height: 12px;
             margin: 0 .2rem 0 0;
@@ -237,6 +243,12 @@
                             <!--                                {choice}-->
                             <!--                            </Radio>-->
 
+                        </div>
+                        <div class="view">
+                            <label>
+                                <input type="checkbox" bind:checked={$context.showFinished}>
+                                Show finished
+                            </label>
                         </div>
                         <!--                        <hr/>-->
                         <!--                        <div class="flex justify-between">-->

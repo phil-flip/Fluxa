@@ -24,9 +24,18 @@ export enum GROUPS {
     NO_GROUPING = 'NO_GROUPING',
 }
 
+export enum STATES {
+    BACKLOG = 0,
+    TO_DO = 1,
+    IN_PROGRESS = 2,
+    COMPLETED = 3,
+    CANCELED = 4,
+}
+
 export interface ContextStore {
     layout: LAYOUTS;
     groupBy: GROUPS;
+    showFinished: boolean;
     teamId?: string,
     projectId?: string,
 }
@@ -40,6 +49,7 @@ function createContextStore(): Writable<ContextStore> {
     let context: ContextStore = {
         layout: LAYOUTS.LIST,
         groupBy: GROUPS.STATUS,
+        showFinished: true,
     };
     if (isBrowser) {
         const storedContext = localStorage.getItem(LOCAL_STORAGE_KEY);

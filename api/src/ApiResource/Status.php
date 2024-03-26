@@ -15,5 +15,8 @@ class Status
     public string $name;
 
     #[Groups(['read'])]
+    public int $state;
+
+    #[Groups(['read'])]
     public int $sortOrder;
 }
