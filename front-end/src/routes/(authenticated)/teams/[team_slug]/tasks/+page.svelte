@@ -37,7 +37,7 @@
     $: updateContext($dataStore, $page.params.team_slug);
 </script>
 
-<Header breadcrumb="Team {team?.name ?? ''} - Tasks"/>
+<Header breadcrumb="{team?.name ?? ''} - Tasks"/>
 
 <Main>
     <TaskLists tasks="{tasks}"/>

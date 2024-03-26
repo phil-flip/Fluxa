@@ -77,7 +77,7 @@
             <!--                </a>-->
             <!--            </li>-->
             <li>
-                <div class="text-gray-600 font-bold text-sm">Your teams</div>
+                <div class="text-gray-600 font-bold text-sm">Your spaces</div>
                 {#if $dataStore.teams}
                     <ul class="hs-accordion-group pt-2" data-hs-accordion-always-open="">
                         {#each $dataStore.teams as team, i}

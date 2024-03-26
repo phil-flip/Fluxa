@@ -14,8 +14,8 @@
 <Main>
     {#if $dataStore.loading === false && $dataStore.teams?.length === 0}
         <CenterBox>
-            <h2>No teams</h2>
-            <p>Create your first team directly from the "Add task" dialog.</p>
+            <h2>No spaces</h2>
+            <p>Create your first space directly from the "Add task" dialog.</p>
         </CenterBox>
     {/if}
 </Main>

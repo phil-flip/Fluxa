@@ -34,7 +34,7 @@
                   style="background-color: {choice.properties.color}"/>
             {choice.name}
         {:else}
-            Team
+            Space
         {/if}
     </svelte:fragment>
 
