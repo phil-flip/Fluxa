@@ -80,7 +80,7 @@
                 Report
             </a>
             <a class="border rounded py-2 px-3 border-primary-700 text-primary-700 text-sm w-full block"
-               href="https://discord.gg/SdnparkQ" target="_blank">
+               href="https://discord.gg/aqFT5H4c6u" target="_blank">
                 <DiscordIcon class="mr-1"/>
                 Join on Discord
             </a>
