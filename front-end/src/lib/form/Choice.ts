@@ -1,3 +1,5 @@
+import {EventHelper} from "$src/utilities/EventHelper";
+
 export type GetValueType<Choice> = (choice: Choice) => string;
 export type FilterType<Choice> = (choice: Choice, query: string) => boolean;
 export type GetFilterValue<Choice> = (choice: Choice) => string;
@@ -45,3 +47,20 @@ export class ChoiceHandler<Choice> {
         return new Map(choices.map(choice => [getValue(choice), choice]));
     }
 }
+
+export const onSearchKeyDown = EventHelper.onEnter((event) => {
+    event.preventDefault();
+
+    const checkbox = event.target!.closest('[role="tooltip"], .menu .sub-menu')
+        .querySelector('[type="radio"], [type="checkbox"]');
+    if (!checkbox) {
+        return;
+    }
+
+    checkbox.checked = !checkbox.checked;
+
+    checkbox.dispatchEvent(new Event('change', {
+        'bubbles': true,
+        'cancelable': true
+    }));
+});

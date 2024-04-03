@@ -4,7 +4,13 @@
 
 <script generics="Choice" lang="ts">
     import {Button, Dropdown, Radio, Search} from "flowbite-svelte";
-    import type {FilterType, GetFilterValue, GetValueType, OnCreate} from "$lib/form/Choice";
+    import {
+        type FilterType,
+        type GetFilterValue,
+        type GetValueType,
+        type OnCreate,
+        onSearchKeyDown
+    } from "$lib/form/Choice";
     import {ChoiceHandler, ChoicesFilter} from "$lib/form/Choice";
     import {Plus} from "lucide-svelte";
     import {createEventDispatcher} from "svelte";
@@ -131,13 +137,13 @@
             <!--        Not supported right now, fix after update to Svelte 5 with snippets:-->
             <!--        See: https://svelte-5-preview.vercel.app/docs/snippets#snippets-and-slots -->
             <!--{#if enableSearch}-->
-            <div class="p-3" slot="header">
+            <div class="p-3" slot="header" on:keydown={onSearchKeyDown}>
                 <Search autofocus bind:value={searchQuery} size="md"/>
             </div>
             <!--{/if}-->
             {#if onCreate && searchQuery && filteredChoices.length === 0}
                 <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
-                    <Radio on:click={internalOnCreate} class="p-2" custom>
+                    <Radio on:change={internalOnCreate} class="p-2" custom>
                         <Plus strokeWidth="3" style="width: 20px;height: 20px;margin-right: .3rem"/>
                         {searchQuery}
                     </Radio>
@@ -160,14 +166,14 @@
     </div>
 {:else}
     {#if enableSearch}
-        <div class="p-3">
+        <div class="p-3" on:keydown={onSearchKeyDown}>
             <Search autofocus bind:value={searchQuery} size="md"/>
         </div>
     {/if}
     <ul>
         {#if onCreate && searchQuery && filteredChoices.length === 0}
             <li class="choice rounded hover:bg-gray-100 dark:hover:bg-gray-600 outline-primary-500">
-                <Radio on:click={internalOnCreate} class="p-2" custom>
+                <Radio on:change={internalOnCreate} class="p-2" custom>
                     <Plus strokeWidth="3" style="width: 20px;height: 20px;margin-right: .3rem"/>
                     {searchQuery}
                 </Radio>

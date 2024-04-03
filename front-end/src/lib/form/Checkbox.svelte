@@ -3,7 +3,13 @@
 </script>
 
 <script generics="Choice" lang="ts">
-    import type {FilterType, GetFilterValue, GetValueType, OnCreate} from "$lib/form/Choice";
+    import {
+        type FilterType,
+        type GetFilterValue,
+        type GetValueType,
+        type OnCreate,
+        onSearchKeyDown
+    } from "$lib/form/Choice";
     import {ChoiceHandler, ChoicesFilter} from "$lib/form/Choice";
     import {Button, Dropdown, Search} from "flowbite-svelte";
     import {createEventDispatcher} from "svelte";
@@ -92,7 +98,7 @@
     <Dropdown bind:open class="{dropdownClass} overflow-y-auto px-3 pb-3 text-sm h-44" tabindex={-2}>
         <!-- Not possible yet, see: https://github.com/sveltejs/svelte/issues/5604 -->
         <!--{#if filterHandler.hasFilter()}-->
-        <div class="p-3" slot="header">
+        <div class="p-3" slot="header" on:keydown={onSearchKeyDown}>
             <Search autofocus bind:value={searchQuery} size="md"/>
         </div>
         <!--{/if}-->
@@ -102,7 +108,7 @@
         </CheckboxItems>
     </Dropdown>
 {:else}
-    <div class="p-3">
+    <div class="p-3" on:keydown={onSearchKeyDown}>
         <Search autofocus bind:value={searchQuery} size="md"/>
     </div>
     <ul>
