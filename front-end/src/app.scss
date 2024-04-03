@@ -31,3 +31,18 @@ svg {
     width: 14px;
     height: 14px;
 }
+
+.slide {
+    display: grid!important;
+    grid-template-rows: 0fr;
+    transition: 300ms;
+    overflow: hidden;
+
+    &[data-state="open"] {
+        grid-template-rows: 1fr;
+    }
+
+    > * {
+        min-height: 0;
+    }
+}
