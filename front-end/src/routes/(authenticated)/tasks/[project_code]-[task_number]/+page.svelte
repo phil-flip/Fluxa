@@ -219,6 +219,7 @@
                 <div>
                     {#if projects}
                         <ProjectChoice value={task.projectId}
+                                       baseComponent="{{teamId: task.teamId}}"
                                        choices="{projects}"
                                        on:change={(event)=>{
                                           const projectId = event.detail.value;
