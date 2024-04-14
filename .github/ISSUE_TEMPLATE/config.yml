@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Official Discord
+    url: https://discord.com/invite/aqFT5H4e6u
+    about: The place to discuss all things Fluxa.
+  - name: Website
+    url: https://fluxa.app/
+    about: Official website about out project.
+  - name: Support E-Mail
+    url: mailto:support@fluxa.app
+    about: Official support.

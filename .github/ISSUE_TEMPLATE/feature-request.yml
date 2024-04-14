@@ -1,0 +1,35 @@
+name: Feature Request
+description: Recommend a feature for consideration.
+title: "FEAT: "
+labels: [enhancement]
+assignees: NickStemerdink
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem? Please describe.
+      description: A description of what the problem is.
+    placeholder: I'm always frustrated when...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      description: Pitch your Idea that you think will fix your issue.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered
+      description: Explain alternative ideas to your solutions and why you scratched these ideas.
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here. You can also mention anyone, that helped discuss this idea with.
+    validations:
+      required: false
